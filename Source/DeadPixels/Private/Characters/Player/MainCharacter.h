@@ -20,6 +20,7 @@ class AMainCharacter : public ACharacterBase
 public:
 	AMainCharacter();
 	virtual void BeginPlay() override;
+	virtual void Tick( float DeltaSeconds ) override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=GameplayTags)
