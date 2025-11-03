@@ -78,8 +78,6 @@ void AMainCharacter::Movement(const FInputActionValue& Value)
 
 	AddMovementInput(ForwardVector, MovementDirection.X);
 	AddMovementInput(RightVector, MovementDirection.Y);
-
-	//Directionality = FVector2D(MovementDirection.X, MovementDirection.Y);
 }
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
