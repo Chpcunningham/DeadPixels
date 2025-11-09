@@ -8,7 +8,7 @@ public class DeadPixels : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "PaperZD", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "PaperZD", "EnhancedInput", "Paper2D" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

@@ -6,6 +6,11 @@
 #include "Characters/CharacterBase.h"
 #include "GameplayTagContainer.h"
 #include "InputActionValue.h"
+#include "Weapons/Weapons.h"
+
+#include "Engine/TimerHandle.h"
+#include "Bullet.h"
+
 #include "MainCharacter.generated.h"
 
 class UInputAction;
@@ -30,13 +35,41 @@ public:
 	FVector2D Directionality;
 
 	UPROPERTY(EditAnywhere, Category = AnimInstance)
-	TSubclassOf<UPaperZDAnimInstance> PlayerInstance; 
+	TSubclassOf<UPaperZDAnimInstance> PlayerInstance;
+	
+	//This is temporary
+	//To move to Weapons soon
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	USceneComponent* WeaponParent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPaperFlipbookComponent* WeaponFlipbook;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	USceneComponent* BulletSpawnPosition;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ABullet> BulletActorToSpawn;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool CanShoot = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CooldownDuration = 0.3f;
+
+	FTimerHandle CooldownTimer;
+	
 protected:
 	void Movement(const FInputActionValue& Value);
+	void Attack(const FInputActionValue& Value);
+	
 
 private:
 	float WalkSpeed = 350.f;
 	float RunSpeed = 600.f;
+
+	UPROPERTY(EditAnywhere, Category="Weapons")
+	AWeapons* CurrentWeapon;
 	
 	UPROPERTY(EditAnywhere, Category=Input)
 	UInputMappingContext* PlayerMappingContext;
@@ -47,9 +80,15 @@ private:
 	UPROPERTY(EditAnywhere, Category=Input)
 	UInputAction* RunAction;
 
+	UPROPERTY(EditAnywhere, Category=Input)
+	UInputAction* AttackAction;
+
 	UPROPERTY(EditAnywhere)
 	class USpringArmComponent* SpringArm;
 	
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* Camera;
+
+	//Temporary
+	void OnCooldownTimerTimeout();
 };

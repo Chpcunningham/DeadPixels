@@ -2,6 +2,8 @@
 
 
 #include "Characters/Player/MainCharacter.h"
+
+#include "Bullet.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputAction.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -13,6 +15,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameTags/PlayerTagManager.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Weapons/Weapons.h"
+
 
 AMainCharacter::AMainCharacter()
 {
@@ -31,7 +35,17 @@ AMainCharacter::AMainCharacter()
 	Camera->SetupAttachment(SpringArm);
 	Camera->ProjectionMode = ECameraProjectionMode::Orthographic;
 	Camera->OrthoWidth = 800.f;
-	
+
+
+	//To move to weapons
+	WeaponParent = CreateDefaultSubobject<USceneComponent>(TEXT("GunParent"));
+	WeaponParent->SetupAttachment(GetRootComponent());
+
+	WeaponFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("WeaponFlipbook"));
+	WeaponFlipbook->SetupAttachment(WeaponParent);
+
+	BulletSpawnPosition = CreateDefaultSubobject<USceneComponent>(TEXT("BulletSpawnPosition"));
+	BulletSpawnPosition->SetupAttachment(WeaponFlipbook);
 }
 
 void AMainCharacter::BeginPlay()
@@ -62,6 +76,15 @@ void AMainCharacter::Tick(float DeltaSeconds)
 		FVector MouseWorldLocation = MouseHit.Location - GetActorLocation();
 		Directionality = UKismetMathLibrary::MakeVector2D(MouseWorldLocation.X, MouseWorldLocation.Y);
 		UKismetMathLibrary::Normalize2D(Directionality);
+
+		//To integrate differently later
+		FVector MWorldLoc, MWorldDir;
+		PlayerController->DeprojectMousePositionToWorld(MWorldLoc,MWorldDir);
+		FVector CurrentLoc = GetActorLocation();
+		FVector Start = FVector(CurrentLoc.X, CurrentLoc.Y, 0.0f);
+		FVector Target = FVector(MWorldLoc.X, MWorldLoc.Y, 0.0f);
+		FRotator WeaponRotation = UKismetMathLibrary::FindLookAtRotation(Start, Target);
+		WeaponParent->SetRelativeRotation(WeaponRotation);
 	}
 }
 
@@ -86,7 +109,40 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	if (UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainCharacter::Movement);
+
+		EnhancedInput->BindAction(AttackAction, ETriggerEvent::Started, this, &AMainCharacter::Attack);
+		EnhancedInput->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AMainCharacter::Attack);
 	}
 }
 
+void AMainCharacter::Attack(const FInputActionValue& Value)
+{
+	if (CanShoot)
+	{
+		CanShoot = false;
 
+		//Bullet spawn
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Shoot"));
+		ABullet *Bullet = GetWorld()->SpawnActor<ABullet>(BulletActorToSpawn, BulletSpawnPosition->GetComponentLocation(), FRotator(0, 0, 0));
+		check(Bullet);
+		
+		APlayerController* PlayerController = Cast<APlayerController>(GetController());
+		check(PlayerController);
+		FVector MWorldLoc, MWorldDir;
+		PlayerController->DeprojectMousePositionToWorld(MWorldLoc,MWorldDir);
+
+		FVector CurrentLoc = GetActorLocation();
+		FVector2D BulletDirection = FVector2D(MWorldLoc.X - CurrentLoc.X, MWorldLoc.Y - CurrentLoc.Y);
+		BulletDirection.Normalize();
+
+		float BulletSpeed = Bullet->MovementSpeed;
+		Bullet->Launch(BulletDirection, BulletSpeed);
+
+		GetWorldTimerManager().SetTimer(CooldownTimer, this, &AMainCharacter::OnCooldownTimerTimeout, 1.0f, false, CooldownDuration);
+	}
+}
+
+void AMainCharacter::OnCooldownTimerTimeout()
+{
+	CanShoot = true;
+}
