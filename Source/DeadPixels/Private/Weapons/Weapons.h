@@ -30,29 +30,32 @@ class DEADPIXELS_API AWeapons : public AActor
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	USceneComponent* BulletSpawnPosition;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    float FireRate = 0.3f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int NumOfBullets = 1;
-    
-    FTimerHandle CooldownTimer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
-	float Damage;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool CanAttack = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
+	float Damage;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
 	int Ammo;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
+    float FireRate = 0.3f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
+	int NumOfBullets = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
+	float BulletSpread = 0.0f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
 	bool bIsMelee = false;
 
 	UFUNCTION(BluePrintCallable, Category = "Weapons")
 	virtual void Fire();
+	
+    FTimerHandle CooldownTimer;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ABullet> BulletActorToSpawn;
