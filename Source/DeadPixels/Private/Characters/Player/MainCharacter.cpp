@@ -36,16 +36,16 @@ AMainCharacter::AMainCharacter()
 	Camera->ProjectionMode = ECameraProjectionMode::Orthographic;
 	Camera->OrthoWidth = 800.f;
 
-
-	//To move to weapons
-	WeaponParent = CreateDefaultSubobject<USceneComponent>(TEXT("GunParent"));
+	WeaponParent = CreateDefaultSubobject<USceneComponent>(TEXT("WeaponParent"));
 	WeaponParent->SetupAttachment(GetRootComponent());
 
-	WeaponFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("WeaponFlipbook"));
-	WeaponFlipbook->SetupAttachment(WeaponParent);
+	//To move to weapons
 
-	BulletSpawnPosition = CreateDefaultSubobject<USceneComponent>(TEXT("BulletSpawnPosition"));
-	BulletSpawnPosition->SetupAttachment(WeaponFlipbook);
+	//WeaponFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("WeaponFlipbook"));
+	//WeaponFlipbook->SetupAttachment(WeaponParent);
+
+	//BulletSpawnPosition = CreateDefaultSubobject<USceneComponent>(TEXT("BulletSpawnPosition"));
+	//BulletSpawnPosition->SetupAttachment(WeaponFlipbook);
 }
 
 void AMainCharacter::BeginPlay()
@@ -80,11 +80,21 @@ void AMainCharacter::Tick(float DeltaSeconds)
 		//To integrate differently later
 		FVector MWorldLoc, MWorldDir;
 		PlayerController->DeprojectMousePositionToWorld(MWorldLoc,MWorldDir);
-		FVector CurrentLoc = GetActorLocation();
-		FVector Start = FVector(CurrentLoc.X, CurrentLoc.Y, 0.0f);
-		FVector Target = FVector(MWorldLoc.X, MWorldLoc.Y, 0.0f);
-		FRotator WeaponRotation = UKismetMathLibrary::FindLookAtRotation(Start, Target);
-		WeaponParent->SetRelativeRotation(WeaponRotation);
+		//FVector CurrentLoc = GetActorLocation();
+		//FVector Start = FVector(CurrentLoc.X, CurrentLoc.Y, 0.0f);
+		//FVector Target = FVector(MWorldLoc.X, MWorldLoc.Y, 0.0f);
+		//FRotator WeaponRotation = UKismetMathLibrary::FindLookAtRotation(Start, Target);
+		//WeaponParent->SetRelativeRotation(WeaponRotation);
+
+		// 2D direction from player → mouse
+		FVector2D Dir = FVector2D(MWorldLoc.X - GetActorLocation().X,
+								  MWorldLoc.Y - GetActorLocation().Y);
+
+		float AngleDeg = FMath::RadiansToDegrees(FMath::Atan2(Dir.Y, Dir.X));
+
+		AngleDeg += 90.f;
+		// Apply rotation around Z axis (Yaw)
+		WeaponParent->SetRelativeRotation(FRotator(0.0f, AngleDeg, 0.0f));
 	}
 }
 
@@ -115,34 +125,26 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	}
 }
 
+void AMainCharacter::SetEquippedWeapon(AWeapons* NewWeapon)
+{
+	CurrentWeapon = NewWeapon;
+}
+
+AWeapons* AMainCharacter::GetEquippedWeapon() const
+{
+	return CurrentWeapon;
+}
+
+
 void AMainCharacter::Attack(const FInputActionValue& Value)
 {
-	if (CanShoot)
+	if (AWeapons* Weapon = GetEquippedWeapon())
 	{
-		CanShoot = false;
-
-		//Bullet spawn
-		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Shoot"));
-		ABullet *Bullet = GetWorld()->SpawnActor<ABullet>(BulletActorToSpawn, BulletSpawnPosition->GetComponentLocation(), FRotator(0, 0, 0));
-		check(Bullet);
-		
-		APlayerController* PlayerController = Cast<APlayerController>(GetController());
-		check(PlayerController);
-		FVector MWorldLoc, MWorldDir;
-		PlayerController->DeprojectMousePositionToWorld(MWorldLoc,MWorldDir);
-
-		FVector CurrentLoc = GetActorLocation();
-		FVector2D BulletDirection = FVector2D(MWorldLoc.X - CurrentLoc.X, MWorldLoc.Y - CurrentLoc.Y);
-		BulletDirection.Normalize();
-
-		float BulletSpeed = Bullet->MovementSpeed;
-		Bullet->Launch(BulletDirection, BulletSpeed);
-
-		GetWorldTimerManager().SetTimer(CooldownTimer, this, &AMainCharacter::OnCooldownTimerTimeout, 1.0f, false, CooldownDuration);
+		if (Weapon->CanAttack)
+		{
+			Weapon->Fire();
+		}
 	}
 }
 
-void AMainCharacter::OnCooldownTimerTimeout()
-{
-	CanShoot = true;
-}
+

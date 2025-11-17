@@ -37,27 +37,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = AnimInstance)
 	TSubclassOf<UPaperZDAnimInstance> PlayerInstance;
 	
-	//This is temporary
-	//To move to Weapons soon
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapons")
 	USceneComponent* WeaponParent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	UPaperFlipbookComponent* WeaponFlipbook;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	USceneComponent* BulletSpawnPosition;
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ABullet> BulletActorToSpawn;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool CanShoot = true;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float CooldownDuration = 0.3f;
-
-	FTimerHandle CooldownTimer;
+	void SetEquippedWeapon(AWeapons* NewWeapon);
+	AWeapons* GetEquippedWeapon() const;
 	
 protected:
 	void Movement(const FInputActionValue& Value);
@@ -68,8 +52,8 @@ private:
 	float WalkSpeed = 350.f;
 	float RunSpeed = 600.f;
 
-	UPROPERTY(EditAnywhere, Category="Weapons")
-	AWeapons* CurrentWeapon;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Weapons", meta=(AllowPrivateAccess=true))
+	AWeapons* CurrentWeapon = nullptr;
 	
 	UPROPERTY(EditAnywhere, Category=Input)
 	UInputMappingContext* PlayerMappingContext;
@@ -89,6 +73,5 @@ private:
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* Camera;
 
-	//Temporary
-	void OnCooldownTimerTimeout();
+	
 };

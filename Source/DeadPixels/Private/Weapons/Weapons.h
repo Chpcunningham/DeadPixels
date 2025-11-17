@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GameplayTagContainer.h"
+#include "Bullet.h"
 #include "PaperFlipbookComponent.h"
 #include "Weapons.generated.h"
 
@@ -30,12 +31,19 @@ class DEADPIXELS_API AWeapons : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	USceneComponent* BulletSpawnPosition;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float FireRate = 0.3f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int NumOfBullets = 1;
+    
+    FTimerHandle CooldownTimer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
 	float Damage;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
-	float FireRate;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool CanAttack = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
 	int Ammo;
@@ -45,6 +53,11 @@ class DEADPIXELS_API AWeapons : public AActor
 
 	UFUNCTION(BluePrintCallable, Category = "Weapons")
 	virtual void Fire();
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ABullet> BulletActorToSpawn;
+	
+	void OnCooldownTimerTimeout();
 	
 };
 /*class Weapons
