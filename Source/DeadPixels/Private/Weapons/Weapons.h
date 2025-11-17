@@ -47,7 +47,13 @@ class DEADPIXELS_API AWeapons : public AActor
 	int NumOfBullets = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
-	float BulletSpread = 0.0f;
+	float BulletSpeed;
+	
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
+	//float BulletSpreadX;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
+	//float BulletSpreadY;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
 	bool bIsMelee = false;

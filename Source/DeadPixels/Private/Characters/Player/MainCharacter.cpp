@@ -87,8 +87,7 @@ void AMainCharacter::Tick(float DeltaSeconds)
 		//WeaponParent->SetRelativeRotation(WeaponRotation);
 
 		// 2D direction from player → mouse
-		FVector2D Dir = FVector2D(MWorldLoc.X - GetActorLocation().X,
-								  MWorldLoc.Y - GetActorLocation().Y);
+		FVector2D Dir = FVector2D(MWorldLoc.X - GetActorLocation().X, MWorldLoc.Y - GetActorLocation().Y);
 
 		float AngleDeg = FMath::RadiansToDegrees(FMath::Atan2(Dir.Y, Dir.X));
 
