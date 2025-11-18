@@ -36,6 +36,9 @@ AMainCharacter::AMainCharacter()
 	Camera->ProjectionMode = ECameraProjectionMode::Orthographic;
 	Camera->OrthoWidth = 800.f;
 
+	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Block);
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
 	WeaponParent = CreateDefaultSubobject<USceneComponent>(TEXT("WeaponParent"));
 	WeaponParent->SetupAttachment(GetRootComponent());
 

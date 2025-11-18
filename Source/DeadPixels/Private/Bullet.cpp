@@ -11,6 +11,14 @@ ABullet::ABullet()
 	BulletSprite->SetupAttachment(RootComponent);
 	
 	MovementDirection = FVector2D(1.0f, 0.0f);
+
+	// Enable Hit Events on the Sphere Component
+	SphereComp->SetNotifyRigidBodyCollision(true);
+    
+	// Ensure collision is enabled
+	SphereComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	
+	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapStart);
 }
 
 void ABullet::BeginPlay()
@@ -33,6 +41,12 @@ void ABullet::Tick(float DeltaTime)
 	
 		SetActorLocation(NewLocation);
 	}
+}
+
+void ABullet::OnOverlapStart(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	GEngine->AddOnScreenDebugMessage(1,3.f,FColor::Red,FString(TEXT("Bullet hit someone")));
 }
 
 void ABullet::Launch(FVector2D Direction, float Speed)
