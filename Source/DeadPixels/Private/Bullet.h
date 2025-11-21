@@ -26,7 +26,7 @@ public:
 	bool IsLaunched = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MovementSpeed = 300.0f;
+	float MovementSpeed = 3000.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float DeleteTime = 10.0f;

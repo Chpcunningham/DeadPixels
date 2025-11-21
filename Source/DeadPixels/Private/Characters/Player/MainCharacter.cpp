@@ -2,8 +2,6 @@
 
 
 #include "Characters/Player/MainCharacter.h"
-
-#include "Bullet.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputAction.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -39,6 +37,11 @@ AMainCharacter::AMainCharacter()
 
 	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Block);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
+	HurtBox->SetCollisionProfileName(TEXT("HitDetection"));
+	HurtBox->SetGenerateOverlapEvents(true);
+	HurtBox->UpdateOverlaps();
+	HurtBox->SetBoxExtent(FVector(25.f, 25.f, 70.f));
 
 
 	WeaponParent = CreateDefaultSubobject<USceneComponent>(TEXT("WeaponParent"));

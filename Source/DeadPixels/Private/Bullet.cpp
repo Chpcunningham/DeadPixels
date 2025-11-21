@@ -1,5 +1,7 @@
 #include "Bullet.h"
 
+#include "Characters/Enemies/EnemyBase.h"
+
 ABullet::ABullet()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -14,10 +16,8 @@ ABullet::ABullet()
 
 	// Enable Hit Events on the Sphere Component
 	SphereComp->SetNotifyRigidBodyCollision(true);
-    
-	// Ensure collision is enabled
-	SphereComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	
+	SphereComp->SetGenerateOverlapEvents(true);
+	SphereComp->UpdateOverlaps();
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapStart);
 }
 
@@ -46,7 +46,10 @@ void ABullet::Tick(float DeltaTime)
 void ABullet::OnOverlapStart(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	GEngine->AddOnScreenDebugMessage(1,3.f,FColor::Red,FString(TEXT("Bullet hit someone")));
+	if (AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor))
+	{
+		GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, FString(TEXT("Hit an enemy")));
+	}
 }
 
 void ABullet::Launch(FVector2D Direction, float Speed)

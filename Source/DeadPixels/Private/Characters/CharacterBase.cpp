@@ -14,6 +14,9 @@ ACharacterBase::ACharacterBase()
 	
 	HurtBox = CreateDefaultSubobject<UBoxComponent>(FName("HurtBox"));
     HurtBox->SetupAttachment(RootComponent);
+	HurtBox->SetGenerateOverlapEvents(true);
+	HurtBox->UpdateOverlaps();
+	HurtBox->SetCollisionProfileName(TEXT("HitDetection"));
 }
 
 void ACharacterBase::BeginPlay()
