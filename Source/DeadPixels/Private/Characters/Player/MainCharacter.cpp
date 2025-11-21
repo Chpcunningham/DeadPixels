@@ -110,8 +110,6 @@ void AMainCharacter::Tick(float DeltaSeconds)
 
 void AMainCharacter::Movement(const FInputActionValue& Value)
 {
-	if (!HealthComp->IsDead) return;
-	
 	if (PlayerTags.HasTag(Movement_State_Running)
 		    ? GetCharacterMovement()->MaxWalkSpeed = RunSpeed : GetCharacterMovement()->MaxWalkSpeed = WalkSpeed){}
 	FVector2D MovementDirection = Value.Get<FVector2D>();
