@@ -6,6 +6,7 @@
 #include "PaperZDCharacter.h"
 #include "CharacterBase.generated.h"
 
+class UHealthComponent;
 /**
  * 
  */
@@ -16,8 +17,18 @@ class ACharacterBase : public APaperZDCharacter
 	
 public:
 	ACharacterBase();
-	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void AnyDamageTaken(AActor* DamagedActor, float DamageAmount, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	UHealthComponent* HealthComp;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    class UBoxComponent* HurtBox;
+	class UBoxComponent* HurtBox;
+protected:
+	
+	virtual void BeginPlay() override;
+	
+
 };

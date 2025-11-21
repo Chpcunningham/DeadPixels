@@ -11,6 +11,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/HealthComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameTags/PlayerTagManager.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -24,7 +25,7 @@ AMainCharacter::AMainCharacter()
 	bUseControllerRotationYaw = false;
 	GetSprite()->SetUsingAbsoluteRotation(true);
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
-	
+
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	SpringArm->SetWorldRotation(FRotator(270.f, 270.f, 0));
@@ -46,7 +47,7 @@ AMainCharacter::AMainCharacter()
 
 	WeaponParent = CreateDefaultSubobject<USceneComponent>(TEXT("WeaponParent"));
 	WeaponParent->SetupAttachment(GetRootComponent());
-	
+
 
 	//To move to weapons
 
@@ -62,11 +63,12 @@ void AMainCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	GetAnimationComponent()->SetAnimInstanceClass(PlayerInstance);
-	
+
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
 		PlayerController->SetShowMouseCursor(true);
-		if (UEnhancedInputLocalPlayerSubsystem* PlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		if (UEnhancedInputLocalPlayerSubsystem* PlayerSubsystem = ULocalPlayer::GetSubsystem<
+			UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			PlayerSubsystem->AddMappingContext(PlayerMappingContext, 0);
 		}
@@ -76,11 +78,11 @@ void AMainCharacter::BeginPlay()
 void AMainCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	
+
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
 		FHitResult MouseHit;
-		PlayerController->GetHitResultUnderCursorByChannel(TraceTypeQuery1, true,MouseHit);
+		PlayerController->GetHitResultUnderCursorByChannel(TraceTypeQuery1, true, MouseHit);
 
 		FVector MouseWorldLocation = MouseHit.Location - GetActorLocation();
 		Directionality = UKismetMathLibrary::MakeVector2D(MouseWorldLocation.X, MouseWorldLocation.Y);
@@ -88,7 +90,7 @@ void AMainCharacter::Tick(float DeltaSeconds)
 
 		//To integrate differently later
 		FVector MWorldLoc, MWorldDir;
-		PlayerController->DeprojectMousePositionToWorld(MWorldLoc,MWorldDir);
+		PlayerController->DeprojectMousePositionToWorld(MWorldLoc, MWorldDir);
 		//FVector CurrentLoc = GetActorLocation();
 		//FVector Start = FVector(CurrentLoc.X, CurrentLoc.Y, 0.0f);
 		//FVector Target = FVector(MWorldLoc.X, MWorldLoc.Y, 0.0f);
@@ -108,7 +110,10 @@ void AMainCharacter::Tick(float DeltaSeconds)
 
 void AMainCharacter::Movement(const FInputActionValue& Value)
 {
-	if (PlayerTags.HasTag(Movement_State_Running) ? GetCharacterMovement()->MaxWalkSpeed = RunSpeed : GetCharacterMovement()->MaxWalkSpeed = WalkSpeed) {}
+	if (!HealthComp->IsDead) return;
+	
+	if (PlayerTags.HasTag(Movement_State_Running)
+		    ? GetCharacterMovement()->MaxWalkSpeed = RunSpeed : GetCharacterMovement()->MaxWalkSpeed = WalkSpeed){}
 	FVector2D MovementDirection = Value.Get<FVector2D>();
 
 	const FRotator Rotation = GetControlRotation();
@@ -120,6 +125,7 @@ void AMainCharacter::Movement(const FInputActionValue& Value)
 	AddMovementInput(ForwardVector, MovementDirection.X);
 	AddMovementInput(RightVector, MovementDirection.Y);
 }
+
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -154,5 +160,3 @@ void AMainCharacter::Attack(const FInputActionValue& Value)
 		}
 	}
 }
-
-

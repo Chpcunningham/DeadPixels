@@ -5,6 +5,7 @@
 #include "PaperFlipbookComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/HealthComponent.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -17,10 +18,20 @@ ACharacterBase::ACharacterBase()
 	HurtBox->SetGenerateOverlapEvents(true);
 	HurtBox->UpdateOverlaps();
 	HurtBox->SetCollisionProfileName(TEXT("HitDetection"));
+
+	OnTakeAnyDamage.AddDynamic(this, &ACharacterBase::AnyDamageTaken);
+	HealthComp = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+}
+
+void ACharacterBase::AnyDamageTaken(AActor* DamagedActor, float DamageAmount, const class UDamageType* DamageType,
+	class AController* InstigatedBy, AActor* DamageCauser)
+{
+	HealthComp->DecreaseHealth(DamageAmount);
 }
 
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	HealthComp->CurrentHealth = HealthComp->MaxHealth;
 }

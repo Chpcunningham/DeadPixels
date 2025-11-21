@@ -8,7 +8,9 @@
 #include "Characters/Player/MainCharacter.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/HealthComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 AEnemyBase::AEnemyBase()
 {
@@ -30,8 +32,11 @@ AEnemyBase::AEnemyBase()
 
 void AEnemyBase::MoveEnemy(FVector WorldDirection)
 {
-	this->AddMovementInput(WorldDirection, 1.f);
-	GetCharacterMovement()->MaxWalkSpeed = 250.f;
+	if (!HealthComp->IsDead)
+	{
+		this->AddMovementInput(WorldDirection, 1.f);
+		GetCharacterMovement()->MaxWalkSpeed = 250.f;
+	}
 }
 
 void AEnemyBase::OnOverlapPlayer(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -39,7 +44,7 @@ void AEnemyBase::OnOverlapPlayer(UPrimitiveComponent* OverlappedComponent, AActo
 {
 	if (AMainCharacter* Player = Cast<AMainCharacter>(OtherActor))
 	{
-		GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Blue, FString(TEXT("OverlappingPLayer")));
+		UGameplayStatics::ApplyDamage(Player, 1.f, this->GetController(), this, UDamageType::StaticClass());
 	}
 }
 
@@ -49,6 +54,7 @@ void AEnemyBase::BeginPlay()
 
 	GetAnimationComponent()->SetAnimInstanceClass(EnemyInstance);
 
+	
 	// Debug: Print collision settings
 	if (HurtBox)
 	{
@@ -61,7 +67,7 @@ void AEnemyBase::BeginPlay()
 			FString::Printf(TEXT("HurtBox GenerateOverlapEvents: %s"), 
 			HurtBox->GetGenerateOverlapEvents() ? TEXT("True") : TEXT("False")));
 
-		// Make HurtBox visible for debugging
+
 		HurtBox->SetHiddenInGame(false);
 		HurtBox->ShapeColor = FColor::Red;
 	}
