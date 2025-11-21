@@ -2,13 +2,21 @@
 
 
 #include "Characters/CharacterBase.h"
-#include "PaperZDAnimInstance.h"
 #include "PaperFlipbookComponent.h"
-#include "PaperZDAnimationComponent.h"
+#include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 
 ACharacterBase::ACharacterBase()
 {
 	GetSprite()->SetWorldRotation(FRotator(0.f,0.f,270.f));
+	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Block);
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	
+	HurtBox = CreateDefaultSubobject<UBoxComponent>(FName("HurtBox"));
+    HurtBox->SetupAttachment(RootComponent);
+	HurtBox->SetGenerateOverlapEvents(true);
+	HurtBox->UpdateOverlaps();
+	HurtBox->SetCollisionProfileName(TEXT("HitDetection"));
 }
 
 void ACharacterBase::BeginPlay()

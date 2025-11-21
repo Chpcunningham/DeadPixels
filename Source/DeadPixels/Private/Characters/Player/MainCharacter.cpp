@@ -2,8 +2,6 @@
 
 
 #include "Characters/Player/MainCharacter.h"
-
-#include "Bullet.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputAction.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -11,6 +9,7 @@
 #include "PaperFlipbookComponent.h"
 #include "PaperZDAnimationComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameTags/PlayerTagManager.h"
@@ -36,8 +35,18 @@ AMainCharacter::AMainCharacter()
 	Camera->ProjectionMode = ECameraProjectionMode::Orthographic;
 	Camera->OrthoWidth = 800.f;
 
+	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Block);
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
+	HurtBox->SetCollisionProfileName(TEXT("HitDetection"));
+	HurtBox->SetGenerateOverlapEvents(true);
+	HurtBox->UpdateOverlaps();
+	HurtBox->SetBoxExtent(FVector(25.f, 25.f, 70.f));
+
+
 	WeaponParent = CreateDefaultSubobject<USceneComponent>(TEXT("WeaponParent"));
 	WeaponParent->SetupAttachment(GetRootComponent());
+	
 
 	//To move to weapons
 

@@ -1,5 +1,7 @@
 #include "Bullet.h"
 
+#include "Characters/Enemies/EnemyBase.h"
+
 ABullet::ABullet()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -11,6 +13,12 @@ ABullet::ABullet()
 	BulletSprite->SetupAttachment(RootComponent);
 	
 	MovementDirection = FVector2D(1.0f, 0.0f);
+
+	// Enable Hit Events on the Sphere Component
+	SphereComp->SetNotifyRigidBodyCollision(true);
+	SphereComp->SetGenerateOverlapEvents(true);
+	SphereComp->UpdateOverlaps();
+	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapStart);
 }
 
 void ABullet::BeginPlay()
@@ -32,6 +40,15 @@ void ABullet::Tick(float DeltaTime)
 		FVector NewLocation = CurrentLocation + FVector(DistanceToMove.X, DistanceToMove.Y, 0);
 	
 		SetActorLocation(NewLocation);
+	}
+}
+
+void ABullet::OnOverlapStart(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor))
+	{
+		GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, FString(TEXT("Hit an enemy")));
 	}
 }
 
