@@ -14,7 +14,10 @@ class ACharacterBase : public APaperZDCharacter
 {
 	GENERATED_BODY()
 	
-	public:
+public:
 	ACharacterBase();
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    class UBoxComponent* HurtBox;
 };

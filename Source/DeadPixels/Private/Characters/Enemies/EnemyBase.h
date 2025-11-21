@@ -17,11 +17,13 @@ public:
 	AEnemyBase();
 
 	void MoveEnemy(FVector WorldDirection);
+
+	UFUNCTION()
+	void OnOverlapPlayer(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+							   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+							   const FHitResult& SweepResult);
 protected:
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UBoxComponent* HurtBox;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anims")
 	TSubclassOf<UPaperZDAnimInstance> EnemyInstance;
