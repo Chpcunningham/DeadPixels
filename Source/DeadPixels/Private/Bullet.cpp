@@ -1,7 +1,6 @@
 #include "Bullet.h"
 
 #include "Characters/Enemies/EnemyBase.h"
-#include "Characters/Player/MainCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
 ABullet::ABullet()
@@ -51,8 +50,8 @@ void ABullet::OnOverlapStart(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	if (AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor))
 	{
 		GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, FString(TEXT("Hit an enemy")));
-		AMainCharacter* MainCharacter = Cast<AMainCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-		UGameplayStatics::ApplyDamage(Enemy,1.f, MainCharacter->GetController(),MainCharacter, UDamageType::StaticClass() );
+		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		UGameplayStatics::ApplyDamage(Enemy,1.f, PlayerController,PlayerController, UDamageType::StaticClass() );
 	}
 }
 

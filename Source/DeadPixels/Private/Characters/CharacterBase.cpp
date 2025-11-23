@@ -6,7 +6,6 @@
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/HealthComponent.h"
-#include "Kismet/GameplayStatics.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -27,7 +26,10 @@ ACharacterBase::ACharacterBase()
 void ACharacterBase::AnyDamageTaken(AActor* DamagedActor, float DamageAmount, const class UDamageType* DamageType,
                                     class AController* InstigatedBy, AActor* DamageCauser)
 {
-	UGameplayStatics::ApplyDamage(DamagedActor, DamageAmount, this->GetController(), DamageCauser, UDamageType::StaticClass());
+	HealthComp->DecreaseHealth(DamageAmount);
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, 
+		FString::Printf(TEXT("Took %f damage! Health: %f"), DamageAmount, HealthComp->CurrentHealth));
 }
 
 void ACharacterBase::BeginPlay()
