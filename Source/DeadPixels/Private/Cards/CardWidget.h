@@ -17,9 +17,6 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true))
 	UCard* CardInstance;
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void DisplayCardInfo();
-
 	UFUNCTION(BlueprintCallable)
 	void OnCardClicked();
 	

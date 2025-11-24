@@ -67,6 +67,9 @@ private:
 	UPROPERTY(EditAnywhere, Category=Input)
 	UInputAction* AttackAction;
 
+	UPROPERTY(EditAnywhere, Category=Input)
+	UInputAction* LevelUpAction;
+	
 	UPROPERTY(EditAnywhere)
 	class USpringArmComponent* SpringArm;
 	

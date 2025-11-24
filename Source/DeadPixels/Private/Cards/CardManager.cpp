@@ -73,19 +73,19 @@ TArray<TSubclassOf<UCard>> ACardManager::GetRandomCardChoices(int32 Count)
 	return Results;
 }
 
-/*
-ACard* ACardManager::GiveRandomCard(AActor* Target)
+
+UCard* ACardManager::GiveRandomCard(AActor* Target)
 {
 	ECardRarity SelectedRarity = ChooseRarity();
-	TArray<TSubclassOf<ACard>> Pool = GetCardsByRarity(SelectedRarity);
+	TArray<TSubclassOf<UCard>> Pool = GetCardsByRarity(SelectedRarity);
 	if (Pool.Num() == 0)
 		Pool = GetCardsByRarity(ECardRarity::Common);
 	if (Pool.Num() == 0) return nullptr;
 
 	int Index = FMath::RandRange(0, Pool.Num() - 1);
-	ACard* SpawnedCard = GetWorld()->SpawnActor<ACard>(Pool[Index]);
+	UCard* SpawnedCard = GetWorld()->SpawnActor<UCard>(Pool[Index]);
 	if (SpawnedCard)
 		SpawnedCard->ApplyCard(Target);
 
 	return SpawnedCard;
-}*/
+}

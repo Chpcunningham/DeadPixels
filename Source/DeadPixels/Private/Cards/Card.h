@@ -29,16 +29,16 @@ class DEADPIXELS_API UCard : public UObject
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Card")
 	FString CardName;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Card")
 	FString Description;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Card")
 	ECardType CardType;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Card")
 	ECardRarity Rarity = ECardRarity::Common;
 	
 public:	
@@ -53,9 +53,11 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	ECardRarity GetRarity() const { return Rarity; }
-	
+
+	UFUNCTION(BlueprintCallable)
 	virtual void ApplyCard(AActor* Target);
 
+	UFUNCTION(BlueprintCallable)
 	virtual void RemoveCard(AActor* Target);
 	
 };

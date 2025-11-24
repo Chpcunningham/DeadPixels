@@ -8,13 +8,16 @@
 #include "EnhancedInputComponent.h"
 #include "PaperFlipbookComponent.h"
 #include "PaperZDAnimationComponent.h"
+#include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
+#include "Cards/CardManager.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/HealthComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameTags/PlayerTagManager.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Microsoft/COMPointer.h"
 #include "Weapons/Weapons.h"
 
 
@@ -134,6 +137,8 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 		EnhancedInput->BindAction(AttackAction, ETriggerEvent::Started, this, &AMainCharacter::Attack);
 		EnhancedInput->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AMainCharacter::Attack);
+
+		EnhancedInput->BindAction(LevelUpAction, ETriggerEvent::Triggered, this, &AMainCharacter::LevelUp);
 	}
 }
 
@@ -149,9 +154,8 @@ AWeapons* AMainCharacter::GetEquippedWeapon() const
 
 void AMainCharacter::LevelUp(const FInputActionValue& Value)
 {
-	
+	UE_LOG(LogTemp, Warning, TEXT("Level Up"));
 }
-
 
 void AMainCharacter::Attack(const FInputActionValue& Value)
 {

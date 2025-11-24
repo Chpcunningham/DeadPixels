@@ -15,6 +15,6 @@ public:
 	//virtual void RemoveCard(AActor* Target) override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Card")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Card")
 	float FireRateIncrease = 0.2;
 };
