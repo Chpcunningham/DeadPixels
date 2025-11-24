@@ -34,7 +34,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-public:	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
 	FString CardName;
 
@@ -44,6 +43,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
 	ECardType CardType;
 
+	
+public:	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
 	ECardRarity Rarity = ECardRarity::Common;
 

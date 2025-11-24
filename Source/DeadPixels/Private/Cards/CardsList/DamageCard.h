@@ -8,9 +8,14 @@ UCLASS()
 class ADamageCard : public ACard
 {
 	GENERATED_BODY()
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Card")
-	float DamageIncrease = 10.f;
 
-	virtual void ApplyCard(AActor* Target) override;
+	public:
+		ADamageCard();
+
+		virtual void ApplyCard(AActor* Target) override;
+		//virtual void RemoveCard(AActor* Target) override;
+
+	protected:
+		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Card")
+		float DamageIncrease = 10.f;
 };

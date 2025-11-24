@@ -4,15 +4,16 @@
 ADamageCard::ADamageCard()
 {
 	CardName = "Damage Boost";
-	Description = "Increases weapon damage by 10";
+	Description = "Increases your weapon damage.";
 	CardType = ECardType::Weapon;
-	Rarity = ECardRarity::Common;
+	Rarity = ECardRarity::Rare;
 }
 
 void ADamageCard::ApplyCard(AActor* Target)
 {
-	AWeapons* Weapon = Cast<AWeapons>(Target);
-	if (!Weapon) return;
-
-	Weapon->Damage += DamageIncrease;
+	AWeapons* W = Cast<AWeapons>(Target);
+	if (W)
+	{
+		W->Damage += DamageIncrease;
+	}
 }
