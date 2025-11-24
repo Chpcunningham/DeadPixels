@@ -73,6 +73,11 @@ void AWeapons::Fire()
 			Bullet->Launch(BulletDirection, BulletSpeed);
 
 			GetWorldTimerManager().SetTimer(CooldownTimer, this, &AWeapons::OnCooldownTimerTimeout, 1.0f, false, FireRate);
+
+			if (Bullet)
+			{
+				Bullet->CurrentWeapon = this;
+			}
 		}
 		else
 		{
@@ -97,7 +102,11 @@ void AWeapons::Fire()
 
 				//float BulletSpeed = Bullet->MovementSpeed;
 				Bullet->Launch(BulletDirection, BulletSpeed);
-
+				
+				if (Bullet)
+				{
+					Bullet->CurrentWeapon = this;
+				}
 			}
 			
 			GetWorldTimerManager().SetTimer(CooldownTimer, this, &AWeapons::OnCooldownTimerTimeout, 1.0f, false, FireRate);

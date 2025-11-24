@@ -5,12 +5,12 @@
 #include "DamageCard.generated.h"
 
 UCLASS()
-class ADamageCard : public ACard
+class UDamageCard : public UCard
 {
 	GENERATED_BODY()
 
 	public:
-		ADamageCard();
+		UDamageCard();
 
 		virtual void ApplyCard(AActor* Target) override;
 		//virtual void RemoveCard(AActor* Target) override;

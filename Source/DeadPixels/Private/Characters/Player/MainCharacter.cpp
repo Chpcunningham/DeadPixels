@@ -147,6 +147,11 @@ AWeapons* AMainCharacter::GetEquippedWeapon() const
 	return CurrentWeapon;
 }
 
+void AMainCharacter::LevelUp(const FInputActionValue& Value)
+{
+	
+}
+
 
 void AMainCharacter::Attack(const FInputActionValue& Value)
 {

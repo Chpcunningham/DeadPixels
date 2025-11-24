@@ -23,17 +23,12 @@ enum class ECardRarity : uint8
 	Legendary
 };
 
-UCLASS()
-class ACard : public AActor
+UCLASS(Blueprintable, BlueprintType)
+class DEADPIXELS_API UCard : public UObject
 {
 	GENERATED_BODY()
 	
-public:	
-	ACard();
-
 protected:
-	virtual void BeginPlay() override;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
 	FString CardName;
 
@@ -43,11 +38,22 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
 	ECardType CardType;
 
-	
-public:	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
 	ECardRarity Rarity = ECardRarity::Common;
+	
+public:	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FString GetCardName() const { return CardName; }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FString GetDescription() const { return Description; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	ECardType GetCardType() const { return CardType; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	ECardRarity GetRarity() const { return Rarity; }
+	
 	virtual void ApplyCard(AActor* Target);
 
 	virtual void RemoveCard(AActor* Target);

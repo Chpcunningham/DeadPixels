@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "PaperSpriteComponent.h"
 #include "Engine/TimerHandle.h"
+class AWeapons;
 #include "Bullet.generated.h"
 
 UCLASS()
@@ -30,6 +31,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float DeleteTime = 10.0f;
+
+	UPROPERTY()
+	AWeapons* CurrentWeapon;
 
 	FTimerHandle DeleteTimer;
 

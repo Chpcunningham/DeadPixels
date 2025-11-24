@@ -46,7 +46,7 @@ public:
 protected:
 	void Movement(const FInputActionValue& Value);
 	void Attack(const FInputActionValue& Value);
-	
+	void LevelUp(const FInputActionValue& Value);
 
 private:
 	float WalkSpeed = 350.f;

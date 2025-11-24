@@ -19,14 +19,17 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	ACard* GiveRandomCard(AActor* Target);
+	UCard* GiveRandomCard(AActor* Target);
 	
 	ECardRarity ChooseRarity();
 	
-	TArray<TSubclassOf<ACard>> GetCardsByRarity(ECardRarity Rarity);
+	TArray<TSubclassOf<UCard>> GetCardsByRarity(ECardRarity Rarity);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<TSubclassOf<ACard>> CardsArray;
+	TArray<TSubclassOf<UCard>> CardsArray;
+
+	UFUNCTION(BlueprintCallable)
+	TArray<TSubclassOf<UCard>> GetRandomCardChoices(int32 Count);
 
 	UPROPERTY(EditAnywhere, Category="Rarity Weights")
 	float CommonWeight = 70.f;
@@ -42,6 +45,4 @@ public:
 
 	UPROPERTY(EditAnywhere, Category="Rarity Weights")
 	float LegendaryWeight = 0.5f;
-	
-
 };

@@ -1,15 +1,15 @@
 #include "DamageCard.h"
 #include "Weapons/Weapons.h"
 
-ADamageCard::ADamageCard()
+UDamageCard::UDamageCard()
 {
 	CardName = "Damage Boost";
-	Description = "Increases your weapon damage.";
+	Description = "Increases your weapon damage by : {DamageIncrease}";
 	CardType = ECardType::Weapon;
-	Rarity = ECardRarity::Rare;
+	Rarity = ECardRarity::Common;
 }
 
-void ADamageCard::ApplyCard(AActor* Target)
+void UDamageCard::ApplyCard(AActor* Target)
 {
 	AWeapons* W = Cast<AWeapons>(Target);
 	if (W)

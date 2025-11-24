@@ -41,19 +41,39 @@ ECardRarity ACardManager::ChooseRarity()
 	return ECardRarity::Legendary;
 }
 
-TArray<TSubclassOf<ACard>> ACardManager::GetCardsByRarity(ECardRarity Rarity)
+TArray<TSubclassOf<UCard>> ACardManager::GetCardsByRarity(ECardRarity Rarity)
 {
-	TArray<TSubclassOf<ACard>> Result;
+	TArray<TSubclassOf<UCard>> Result;
 	for (auto CardClass : CardsArray)
 	{
 		if (!CardClass) continue;
-		ACard* DefaultObj = Cast<ACard>(CardClass->GetDefaultObject());
-		if (DefaultObj && DefaultObj->Rarity == Rarity)
+		UCard* DefaultObj = Cast<UCard>(CardClass->GetDefaultObject());
+		
+		if (DefaultObj && DefaultObj->GetRarity() == Rarity)
 			Result.Add(CardClass);
 	}
 	return Result;
 }
+TArray<TSubclassOf<UCard>> ACardManager::GetRandomCardChoices(int32 Count)
+{
+	TArray<TSubclassOf<UCard>> Results;
 
+	for (int i = 0; i < Count; i++)
+	{
+		ECardRarity Rarity = ChooseRarity();
+		TArray<TSubclassOf<UCard>> Pool = GetCardsByRarity(Rarity);
+
+		if (Pool.Num() == 0)
+			Pool = CardsArray;
+
+		int Index = FMath::RandRange(0, Pool.Num() - 1);
+		Results.Add(Pool[Index]);
+	}
+
+	return Results;
+}
+
+/*
 ACard* ACardManager::GiveRandomCard(AActor* Target)
 {
 	ECardRarity SelectedRarity = ChooseRarity();
@@ -68,4 +88,4 @@ ACard* ACardManager::GiveRandomCard(AActor* Target)
 		SpawnedCard->ApplyCard(Target);
 
 	return SpawnedCard;
-}
+}*/
