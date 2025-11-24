@@ -11,6 +11,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
 #include "Cards/CardManager.h"
+#include "Characters/CharacterBase.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/HealthComponent.h"
@@ -76,6 +77,8 @@ void AMainCharacter::BeginPlay()
 			PlayerSubsystem->AddMappingContext(PlayerMappingContext, 0);
 		}
 	}
+	HealthComp->OnInvincibiltyEndDelegate.AddDynamic(this,
+		&AMainCharacter::OnInvincibilityEnd_DelegateSignature);
 }
 
 void AMainCharacter::Tick(float DeltaSeconds)
@@ -142,6 +145,68 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	}
 }
 
+void AMainCharacter::FlashSpriteVisibility()
+{
+	if (GetSprite())
+	{
+		GetSprite()->SetVisibility(!GetSprite()->IsVisible());
+	}
+}
+
+void AMainCharacter::HandleSpriteVisibility()
+{
+	if (!IsValid(this)) return;
+
+	GetWorldTimerManager().SetTimer(
+		VisibleHandle,
+		FTimerDelegate::CreateUObject(
+			this,
+			&AMainCharacter::FlashSpriteVisibility),
+			0.1f,
+			true);
+}
+
+void AMainCharacter::HandleHitExtended()
+{
+	if (UPaperZDAnimInstance* CharacterAnimInstance = GetAnimationComponent()->GetAnimInstance())
+	{
+		IsStunned = true;
+		HealthComp->StartInvincibility();
+		HurtBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		if (ACharacterBase* Player = Cast<ACharacterBase>(this))
+		{
+			Player->CustomTimeDilation = 0.f;
+			GetWorldTimerManager().SetTimer(
+				HitHandle,
+				FTimerDelegate::CreateUObject(
+					this,
+					&AMainCharacter::EndHitStop, Player),
+					this->HitStopDuration,
+					false);
+
+			GetWorldTimerManager().SetTimer(
+				StunnedHandle,
+				FTimerDelegate::CreateUObject(
+					this,
+					&AMainCharacter::OnStunnedOverrideCompleted, true),
+					this->StunnedTime,
+					false);
+		}
+		
+	}
+}
+
+void AMainCharacter::EndHitStop(ACharacterBase* ActorHitStop)
+{
+	Super::EndHitStop(ActorHitStop);
+	
+}
+
+void AMainCharacter::OnStunnedOverrideCompleted(bool IsCompleted)
+{
+	Super::OnStunnedOverrideCompleted(IsCompleted);
+}
+
 void AMainCharacter::SetEquippedWeapon(AWeapons* NewWeapon)
 {
 	CurrentWeapon = NewWeapon;
@@ -163,6 +228,14 @@ void AMainCharacter::SwapWeapons(const FInputActionValue& Value)
 
 	//SetEquippedWeapon();
 }
+
+void AMainCharacter::OnInvincibilityEnd_DelegateSignature()
+{
+	GetWorldTimerManager().ClearTimer(VisibleHandle);
+	GetSprite()->SetVisibility(true);
+	HurtBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+}
+
 
 void AMainCharacter::Attack(const FInputActionValue& Value)
 {

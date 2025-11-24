@@ -53,6 +53,7 @@ void ABullet::OnOverlapStart(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		
 		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 		UGameplayStatics::ApplyDamage(Enemy, CurrentWeapon->Damage, PlayerController, PlayerController, UDamageType::StaticClass());
+		this->Destroy();
 	}
 }
 

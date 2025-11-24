@@ -26,7 +26,7 @@ AEnemyBase::AEnemyBase()
 
 	HurtBox->SetGenerateOverlapEvents(true);
 	HurtBox->UpdateOverlaps();
-	
+
 	HurtBox->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBase::OnOverlapPlayer);
 }
 
@@ -39,8 +39,44 @@ void AEnemyBase::MoveEnemy(FVector WorldDirection)
 	}
 }
 
+void AEnemyBase::HandleHitExtended()
+{
+	if (HealthComp->IsDead)
+	{
+		HandleDefeat();
+	}
+	else
+	{
+		if (ACharacterBase* Enemy = Cast<ACharacterBase>(this))
+		{
+			Enemy->CustomTimeDilation = 0.f;
+			GetWorldTimerManager().SetTimer(
+				HitHandle,
+				FTimerDelegate::CreateUObject(
+					this,
+					&AEnemyBase::EndHitStop, Enemy),
+				this->HitStopDuration,
+				false);
+		}
+	}
+}
+
+void AEnemyBase::EndHitStop(ACharacterBase* ActorHitStop)
+{
+	if (!HealthComp->IsDead)
+	{
+		Super::EndHitStop(ActorHitStop);
+		SetStun();
+	}
+	else
+	{
+		HandleDefeat();
+	}
+}
+
 void AEnemyBase::OnOverlapPlayer(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                 UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                                 const FHitResult& SweepResult)
 {
 	if (AMainCharacter* Player = Cast<AMainCharacter>(OtherActor))
 	{
@@ -54,21 +90,57 @@ void AEnemyBase::BeginPlay()
 
 	GetAnimationComponent()->SetAnimInstanceClass(EnemyInstance);
 
-	
+
 	// Debug: Print collision settings
 	if (HurtBox)
 	{
 		FString CollisionObjectType = UEnum::GetValueAsString(HurtBox->GetCollisionObjectType());
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, 
-			FString::Printf(TEXT("HurtBox ObjectType: %s"), *CollisionObjectType));
-        
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow,
+		                                 FString::Printf(TEXT("HurtBox ObjectType: %s"), *CollisionObjectType));
+
 		// Check if overlap events are enabled
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, 
-			FString::Printf(TEXT("HurtBox GenerateOverlapEvents: %s"), 
-			HurtBox->GetGenerateOverlapEvents() ? TEXT("True") : TEXT("False")));
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow,
+		                                 FString::Printf(TEXT("HurtBox GenerateOverlapEvents: %s"),
+		                                                 HurtBox->GetGenerateOverlapEvents()
+			                                                 ? TEXT("True")
+			                                                 : TEXT("False")));
 
 
 		HurtBox->SetHiddenInGame(false);
 		HurtBox->ShapeColor = FColor::Red;
 	}
+}
+
+void AEnemyBase::SetStun()
+{
+	this->IsStunned = true;
+	GetWorldTimerManager().SetTimer(
+		SetStunHandle,
+		FTimerDelegate::CreateUObject(
+			this,
+			&AEnemyBase::EndStun),
+		StunnedDuration,
+		false);
+}
+
+void AEnemyBase::EndStun()
+{
+	this->IsStunned = false;
+}
+
+void AEnemyBase::HandleDefeat()
+{
+	HurtBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetWorldTimerManager().SetTimer(
+		DespawnHandle,
+		FTimerDelegate::CreateUObject(
+			this,
+			&AEnemyBase::Defeated),
+		DespawnDuration,
+		false);
+}
+
+void AEnemyBase::Defeated()
+{
+	this->Destroy();
 }
