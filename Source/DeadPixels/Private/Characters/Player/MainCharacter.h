@@ -53,7 +53,7 @@ private:
 	float WalkSpeed = 350.f;
 	float RunSpeed = 600.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Weapons", meta=(AllowPrivateAccess=true))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons", meta=(AllowPrivateAccess=true))
 	AWeapons* CurrentWeapon = nullptr;
 	
 	UPROPERTY(EditAnywhere, Category=Input)
