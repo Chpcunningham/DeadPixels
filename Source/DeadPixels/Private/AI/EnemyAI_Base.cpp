@@ -11,7 +11,7 @@ void AEnemyAI_Base::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 	PossessedEnemy = Cast<AEnemyBase>(InPawn);
-}
+} 
 
 void AEnemyAI_Base::BeginPlay()
 {

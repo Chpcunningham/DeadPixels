@@ -49,8 +49,8 @@ class DEADPIXELS_API AWeapons : public AActor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
 	float BulletSpeed;
 	
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
-	//float BulletSpreadX;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
+	float BulletSpread;
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
 	//float BulletSpreadY;
