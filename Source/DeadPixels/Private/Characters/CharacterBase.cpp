@@ -52,8 +52,9 @@ void ACharacterBase::AnyDamageTaken(AActor* DamagedActor, float DamageAmount, co
 				FTimerDelegate::CreateUObject(this, &ACharacterBase::EndHitStop, ActorHitStop),
 				HitStopDuration,
 				false);
-			HitActor->HandleHitExtended();
+			
 		}
+		HitActor->HandleHitExtended();
 	}
 	IsStunned = true;
 	GetWorldTimerManager().SetTimer(

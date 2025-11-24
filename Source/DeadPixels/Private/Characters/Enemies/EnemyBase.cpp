@@ -49,7 +49,7 @@ void AEnemyBase::HandleHitExtended()
 	{
 		if (ACharacterBase* Enemy = Cast<ACharacterBase>(this))
 		{
-			Enemy->CustomTimeDilation = 0.f;
+		Enemy->CustomTimeDilation = 0.f;
 			GetWorldTimerManager().SetTimer(
 				HitHandle,
 				FTimerDelegate::CreateUObject(
