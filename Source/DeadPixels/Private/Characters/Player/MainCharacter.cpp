@@ -157,6 +157,13 @@ void AMainCharacter::LevelUp(const FInputActionValue& Value)
 	UE_LOG(LogTemp, Warning, TEXT("Level Up"));
 }
 
+void AMainCharacter::SwapWeapons(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Swap Weapons"));
+
+	//SetEquippedWeapon();
+}
+
 void AMainCharacter::Attack(const FInputActionValue& Value)
 {
 	if (AWeapons* Weapon = GetEquippedWeapon())

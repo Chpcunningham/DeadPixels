@@ -47,6 +47,7 @@ protected:
 	void Movement(const FInputActionValue& Value);
 	void Attack(const FInputActionValue& Value);
 	void LevelUp(const FInputActionValue& Value);
+	void SwapWeapons(const FInputActionValue& Value);
 
 private:
 	float WalkSpeed = 350.f;
@@ -67,6 +68,9 @@ private:
 	UPROPERTY(EditAnywhere, Category=Input)
 	UInputAction* AttackAction;
 
+	UPROPERTY(EditAnywhere, Category=Input)
+	UInputAction* SwapWeaponsAction;
+	
 	UPROPERTY(EditAnywhere, Category=Input)
 	UInputAction* LevelUpAction;
 	
