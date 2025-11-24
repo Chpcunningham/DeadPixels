@@ -6,7 +6,7 @@ UFireRateCard::UFireRateCard()
 	CardName = "Fire rate Boost";
 	Description = "Increases your weapon's attack speed.";
 	CardType = ECardType::Weapon;
-	Rarity = ECardRarity::Rare;
+	Rarity = ECardRarity::Common;
 }
 
 void UFireRateCard::ApplyCard(AActor* Target)

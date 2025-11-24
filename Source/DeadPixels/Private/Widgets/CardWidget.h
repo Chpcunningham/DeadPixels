@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Card.h"
+#include "Cards/Card.h"
 #include "CardWidget.generated.h"
 
 UCLASS()
