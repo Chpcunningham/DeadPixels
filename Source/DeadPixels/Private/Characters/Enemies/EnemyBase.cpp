@@ -5,10 +5,12 @@
 
 #include "PaperZDAnimationComponent.h"
 #include "AI/EnemyAI_Base.h"
+#include "Characters/CharacterBase.h"
 #include "Characters/Player/MainCharacter.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/HealthComponent.h"
+#include "PaperZDAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -47,13 +49,25 @@ void AEnemyBase::HandleHitExtended()
 {
 	if (HealthComp->IsDead)
 	{
-		HandleDefeat();
+		int32 DeathChoice = RandomInt();
+		if (UPaperZDAnimInstance* EnemyAnimInstance = GetAnimationComponent()->GetAnimInstance())
+		{
+			switch (DeathChoice)
+			{
+			case 0: EnemyAnimInstance->JumpToNode(FName("DeathJump"));
+				break;
+			case 1: EnemyAnimInstance->JumpToNode(FName("Death2Jump"));
+				break;
+			default: EnemyAnimInstance->JumpToNode(FName("DeathJump"));
+			}
+			HandleDefeat();
+		}
 	}
 	else
 	{
 		if (ACharacterBase* Enemy = Cast<ACharacterBase>(this))
 		{
-		Enemy->CustomTimeDilation = 0.f;
+			Enemy->CustomTimeDilation = 0.f;
 			GetWorldTimerManager().SetTimer(
 				HitHandle,
 				FTimerDelegate::CreateUObject(
@@ -71,10 +85,6 @@ void AEnemyBase::EndHitStop(ACharacterBase* ActorHitStop)
 	{
 		Super::EndHitStop(ActorHitStop);
 		SetStun();
-	}
-	else
-	{
-		HandleDefeat();
 	}
 }
 
@@ -94,7 +104,7 @@ void AEnemyBase::BeginPlay()
 
 	GetAnimationComponent()->SetAnimInstanceClass(EnemyInstance);
 
-	
+
 	if (HurtBox)
 	{
 		HurtBox->SetHiddenInGame(false);
@@ -122,6 +132,7 @@ void AEnemyBase::EndStun()
 void AEnemyBase::HandleDefeat()
 {
 	HurtBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 	GetWorldTimerManager().SetTimer(
 		DespawnHandle,
 		FTimerDelegate::CreateUObject(
@@ -129,6 +140,13 @@ void AEnemyBase::HandleDefeat()
 			&AEnemyBase::Defeated),
 		DespawnDuration,
 		false);
+}
+
+int32 AEnemyBase::RandomInt()
+{
+	int32 randomInt = FMath::RandRange(0, 1);
+
+	return randomInt;
 }
 
 void AEnemyBase::Defeated()

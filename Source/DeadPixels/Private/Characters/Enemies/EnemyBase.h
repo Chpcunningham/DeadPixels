@@ -36,12 +36,13 @@ protected:
 
 	void SetStun();
 	void EndStun();
-	void HandleDefeat();
 	void Defeated();
+	
+	UFUNCTION(BlueprintCallable)
+	void HandleDefeat();
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anims")
 	TSubclassOf<UPaperZDAnimInstance> EnemyInstance;
-
 private:
 	FTimerHandle HitHandle;
 	FTimerHandle SetStunHandle;
@@ -49,7 +50,7 @@ private:
 
 	float HitStopDuration = 0.1f;
 	float StunnedDuration = 0.5f;
-	float DespawnDuration = 0.5f;
+	float DespawnDuration = 3.f;
 	
-	
+	int32 RandomInt();
 };
