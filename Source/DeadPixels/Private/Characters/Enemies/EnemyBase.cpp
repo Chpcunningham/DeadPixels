@@ -15,7 +15,6 @@
 AEnemyBase::AEnemyBase()
 {
 	AIControllerClass = AEnemyAI_Base::StaticClass();
-
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Block);
@@ -28,6 +27,11 @@ AEnemyBase::AEnemyBase()
 	HurtBox->UpdateOverlaps();
 
 	HurtBox->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBase::OnOverlapPlayer);
+}
+
+void AEnemyBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 }
 
 void AEnemyBase::MoveEnemy(FVector WorldDirection)
@@ -90,22 +94,9 @@ void AEnemyBase::BeginPlay()
 
 	GetAnimationComponent()->SetAnimInstanceClass(EnemyInstance);
 
-
-	// Debug: Print collision settings
+	
 	if (HurtBox)
 	{
-		FString CollisionObjectType = UEnum::GetValueAsString(HurtBox->GetCollisionObjectType());
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow,
-		                                 FString::Printf(TEXT("HurtBox ObjectType: %s"), *CollisionObjectType));
-
-		// Check if overlap events are enabled
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow,
-		                                 FString::Printf(TEXT("HurtBox GenerateOverlapEvents: %s"),
-		                                                 HurtBox->GetGenerateOverlapEvents()
-			                                                 ? TEXT("True")
-			                                                 : TEXT("False")));
-
-
 		HurtBox->SetHiddenInGame(false);
 		HurtBox->ShapeColor = FColor::Red;
 	}

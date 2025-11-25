@@ -27,6 +27,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	class APawn* PlayerTarget;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FVector2D EnemyDirectionality;
+
+
 private:
 	float StopDistance = 10.f;
 };
