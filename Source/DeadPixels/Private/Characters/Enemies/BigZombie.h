@@ -13,5 +13,6 @@ UCLASS()
 class ABigZombie : public AEnemyBase
 {
 	GENERATED_BODY()
-	
+public:
+	ABigZombie();
 };
