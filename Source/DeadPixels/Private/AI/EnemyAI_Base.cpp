@@ -11,7 +11,12 @@ void AEnemyAI_Base::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 	PossessedEnemy = Cast<AEnemyBase>(InPawn);
-} 
+	if (!PossessedEnemy)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to possess enemy!"));
+	}
+
+}
 
 void AEnemyAI_Base::BeginPlay()
 {
@@ -22,7 +27,7 @@ void AEnemyAI_Base::BeginPlay()
 void AEnemyAI_Base::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	UE_LOG(LogTemp, Warning, TEXT("EnemyAI Tick running"));
 	if (PlayerTarget)
 	{
 		FVector TargetForwardVector;
@@ -31,10 +36,18 @@ void AEnemyAI_Base::Tick(float DeltaTime)
 			PlayerTarget->GetActorLocation());
 
 		TargetForwardVector = UKismetMathLibrary::GetForwardVector(TargetRotation);
+
 		if (DistanceToPlayer() > StopDistance)
 		{
 			PossessedEnemy->MoveEnemy(TargetForwardVector);
 		}
+
+		FVector PlayerDirection = TargetForwardVector;
+		PlayerDirection.Z = 0; // Flattens to a 2D Plane
+		PlayerDirection.Normalize();
+		
+		EnemyDirectionality = FVector2D(PlayerDirection.X, PlayerDirection.Y);
+		PossessedEnemy->EnemyDirectionality = EnemyDirectionality;
 	}
 }
 

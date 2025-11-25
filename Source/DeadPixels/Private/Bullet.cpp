@@ -19,13 +19,13 @@ ABullet::ABullet()
 	SphereComp->SetNotifyRigidBodyCollision(true);
 	SphereComp->SetGenerateOverlapEvents(true);
 	SphereComp->UpdateOverlaps();
-	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapStart);
+	
 }
 
 void ABullet::BeginPlay()
 {
 	Super::BeginPlay();
-
+	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapStart);
 	//Launch(FVector2D(0.0f, 1.0f), 25.0f);
 }
 
@@ -53,6 +53,7 @@ void ABullet::OnOverlapStart(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		
 		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 		UGameplayStatics::ApplyDamage(Enemy, CurrentWeapon->Damage, PlayerController, PlayerController, UDamageType::StaticClass());
+		this->Destroy();
 	}
 }
 

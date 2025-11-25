@@ -28,6 +28,16 @@ public:
 	virtual void Tick( float DeltaSeconds ) override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION()
+	void FlashSpriteVisibility();
+
+	UFUNCTION()
+	void HandleSpriteVisibility();
+
+	virtual void HandleHitExtended() override;
+	virtual void EndHitStop(ACharacterBase* ActorHitStop) override;
+	virtual void OnStunnedOverrideCompleted(bool IsCompleted) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=GameplayTags)
 	FGameplayTagContainer PlayerTags;
 	
@@ -50,8 +60,18 @@ protected:
 	void SwapWeapons(const FInputActionValue& Value);
 
 private:
+
+	FTimerHandle VisibleHandle;
+	FTimerHandle HitHandle;
+	FTimerHandle StunnedHandle;
+	float StunnedTime = 0.2f;
+	float HitStopDuration = 0.1f;
+	
 	float WalkSpeed = 350.f;
 	float RunSpeed = 600.f;
+
+	UFUNCTION()
+	void OnInvincibilityEnd_DelegateSignature();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons", meta=(AllowPrivateAccess=true))
 	AWeapons* CurrentWeapon = nullptr;
