@@ -3,15 +3,46 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Characters/Player/MainCharacter.h"
 #include "GameFramework/GameModeBase.h"
 #include "GM_DeadPixels.generated.h"
 
 /**
  * 
  */
+class AMainCharacter;
+class ASpawnManager; 
+class AEnemyBase;
+
 UCLASS()
 class AGM_DeadPixels : public AGameModeBase
 {
 	GENERATED_BODY()
+protected:
+	virtual void BeginPlay() override;
+
+public:
+	virtual void Tick(float DeltaTime) override;
+
+	void StartNextWave();
+
+	UFUNCTION()
+	void HandleWaveCompletion();
+
+	UPROPERTY()
+	ASpawnManager* SpawnManagerInstance;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
+	TSubclassOf<ASpawnManager> SpawnManagerClass;
 	
+	UPROPERTY(EditAnywhere, Category=Enemies)
+	TArray<TSubclassOf<class AEnemyBase>> EnemiesForWave;
+	
+	UPROPERTY(EditAnywhere, Category=Player)
+	AMainCharacter* Player;
+
+	UPROPERTY(EditAnywhere)
+	int32 CurrentWave = 0;
+private:
+	FTimerHandle WaveTimerHandle;
 };

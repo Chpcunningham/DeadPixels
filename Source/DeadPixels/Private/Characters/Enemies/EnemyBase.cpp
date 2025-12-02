@@ -49,22 +49,28 @@ void AEnemyBase::HandleHitExtended()
 {
 	if (HealthComp->IsDead)
 	{
-		int32 DeathChoice = RandomInt();
+		HurtBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		int32 DeathChoice = FMath::RandRange(0, 1);
 		if (UPaperZDAnimInstance* EnemyAnimInstance = GetAnimationComponent()->GetAnimInstance())
 		{
+			GEngine->AddOnScreenDebugMessage(1, 4.f, FColor::Red, FString(TEXT("Attempting to play death animation")));
 			switch (DeathChoice)
 			{
 			case 0: EnemyAnimInstance->JumpToNode(FName("DeathJump"));
+				GEngine->AddOnScreenDebugMessage(1, 4.f, FColor::Red, FString(TEXT("Playing Death")));
 				break;
 			case 1: EnemyAnimInstance->JumpToNode(FName("Death2Jump"));
+				GEngine->AddOnScreenDebugMessage(1, 4.f, FColor::Red, FString(TEXT("Playing Death2")));
 				break;
 			default: EnemyAnimInstance->JumpToNode(FName("DeathJump"));
+				GEngine->AddOnScreenDebugMessage(1, 4.f, FColor::Red, FString(TEXT("Playing Default Death")));
 			}
 			HandleDefeat();
 		}
 	}
 	else
 	{
+		HealthComp->StartInvincibility();
 		if (ACharacterBase* Enemy = Cast<ACharacterBase>(this))
 		{
 			Enemy->CustomTimeDilation = 0.f;
@@ -98,6 +104,12 @@ void AEnemyBase::OnOverlapPlayer(UPrimitiveComponent* OverlappedComponent, AActo
 	}
 }
 
+void AEnemyBase::OnInvincibilityEnd_DelegateSignature()
+{
+	GetSprite()->SetVisibility(true);
+	HurtBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+}
+
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -110,6 +122,8 @@ void AEnemyBase::BeginPlay()
 		HurtBox->SetHiddenInGame(false);
 		HurtBox->ShapeColor = FColor::Red;
 	}
+	HealthComp->OnInvincibiltyEndDelegate.AddDynamic(this,
+	                                                 &AEnemyBase::OnInvincibilityEnd_DelegateSignature);
 }
 
 void AEnemyBase::SetStun()
@@ -142,14 +156,8 @@ void AEnemyBase::HandleDefeat()
 		false);
 }
 
-int32 AEnemyBase::RandomInt()
-{
-	int32 randomInt = FMath::RandRange(0, 1);
-
-	return randomInt;
-}
-
 void AEnemyBase::Defeated()
 {
+	OnEnemyDied.Broadcast(this);
 	this->Destroy();
 }

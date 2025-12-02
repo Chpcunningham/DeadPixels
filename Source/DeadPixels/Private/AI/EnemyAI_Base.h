@@ -28,7 +28,7 @@ public:
 	class APawn* PlayerTarget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FVector2D EnemyDirectionality;
+	FVector2D EnemyDirection;
 
 
 private:

@@ -27,7 +27,7 @@ void AEnemyAI_Base::BeginPlay()
 void AEnemyAI_Base::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	UE_LOG(LogTemp, Warning, TEXT("EnemyAI Tick running"));
+
 	if (PlayerTarget)
 	{
 		FVector TargetForwardVector;
@@ -46,8 +46,8 @@ void AEnemyAI_Base::Tick(float DeltaTime)
 		PlayerDirection.Z = 0; // Flattens to a 2D Plane
 		PlayerDirection.Normalize();
 		
-		EnemyDirectionality = FVector2D(PlayerDirection.X, PlayerDirection.Y);
-		PossessedEnemy->EnemyDirectionality = EnemyDirectionality;
+		EnemyDirection = FVector2D(PlayerDirection.X, PlayerDirection.Y);
+		PossessedEnemy->EnemyDirectionality = EnemyDirection;
 	}
 }
 

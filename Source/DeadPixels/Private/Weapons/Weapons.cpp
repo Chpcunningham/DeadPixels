@@ -118,13 +118,3 @@ void AWeapons::OnCooldownTimerTimeout()
 {
 	CanAttack = true;
 }
-
-
-
-/*Weapons::Weapons()
-{
-}
-
-Weapons::~Weapons()
-{
-}*/
