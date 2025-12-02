@@ -12,7 +12,6 @@ UEnemyDamageCard::UEnemyDamageCard()
 
 void UEnemyDamageCard::ApplyCard(AActor* Target)
 {
-
 	AEnemyBase* EnemyActor = Cast<AEnemyBase>(Target);
 	if (!EnemyActor)
 		return;
