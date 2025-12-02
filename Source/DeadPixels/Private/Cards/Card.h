@@ -58,6 +58,9 @@ public:
 	virtual void ApplyCard(AActor* Target);
 
 	UFUNCTION(BlueprintCallable)
+	virtual void ApplyEnemyCard(UDataAsset* Target);
+
+	UFUNCTION(BlueprintCallable)
 	virtual void RemoveCard(AActor* Target);
 	
 };

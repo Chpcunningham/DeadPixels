@@ -11,6 +11,7 @@ class DEADPIXELS_API UEnemyHealthCard : public UCard
 public:
 	UEnemyHealthCard();
 
+	//virtual void ApplyEnemyCard(UDataAsset* Target) override;
 	virtual void ApplyCard(AActor* Target) override;
 	//virtual void RemoveCard(AActor* Target) override;
 

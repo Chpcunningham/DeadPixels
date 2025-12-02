@@ -41,6 +41,12 @@ public:
 	UPROPERTY(EditAnywhere, Category=Player)
 	AMainCharacter* Player;
 
+	UPROPERTY(BlueprintReadWrite)
+	float GlobalEnemyHealthBonus = 0.f;
+
+	UPROPERTY(BlueprintReadWrite)
+	float GlobalEnemyDamageBonus = 0.f;
+
 	UPROPERTY(EditAnywhere)
 	int32 CurrentWave = 0;
 private:

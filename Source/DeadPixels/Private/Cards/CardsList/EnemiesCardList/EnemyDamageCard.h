@@ -11,8 +11,9 @@ class DEADPIXELS_API UEnemyDamageCard : public UCard
 public:
 	UEnemyDamageCard();
 
-	virtual void ApplyCard(AActor* Target) override;
+	//virtual void ApplyEnemyCard(UDataAsset* Target) override;
 	//virtual void RemoveCard(AActor* Target) override;
+	virtual void ApplyCard(AActor* Target) override;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Card")

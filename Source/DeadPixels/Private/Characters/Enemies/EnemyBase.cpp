@@ -3,16 +3,17 @@
 
 #include "Characters/Enemies/EnemyBase.h"
 
-#include "PaperZDAnimationComponent.h"
 #include "AI/EnemyAI_Base.h"
 #include "Characters/CharacterBase.h"
 #include "Characters/Player/MainCharacter.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/HealthComponent.h"
-#include "PaperZDAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameMode/GM_DeadPixels.h"
 #include "Kismet/GameplayStatics.h"
+#include "PaperZDAnimInstance.h"
+#include "PaperZDAnimationComponent.h"
 
 AEnemyBase::AEnemyBase()
 {
@@ -116,12 +117,22 @@ void AEnemyBase::BeginPlay()
 	Super::BeginPlay();
 
 	GetAnimationComponent()->SetAnimInstanceClass(EnemyInstance);
+
+	AGM_DeadPixels* GM = Cast<AGM_DeadPixels>(GetWorld()->GetAuthGameMode());
+
+	float BonusHealth = GM ? GM->GlobalEnemyHealthBonus : 0.f;
+	float BonusDamage = GM ? GM->GlobalEnemyDamageBonus : 0.f;
+
+	HealthComp->MaxHealth += BonusHealth;
+	HealthComp->CurrentHealth += BonusHealth;
+	Damage += BonusDamage;
 	
+	/*
 	if (Stats)
 	{
 		HealthComp->MaxHealth = Stats->MaxHealth;
 		Damage = Stats->Damage;
-	}
+	}*/
 
 
 	if (HurtBox)

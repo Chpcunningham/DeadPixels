@@ -3,6 +3,7 @@
 #include "Characters/Enemies/EnemyBase.h"
 #include "Characters/Enemies/EnemyStatsData.h"
 #include "Components/HealthComponent.h"
+#include "GameMode/GM_DeadPixels.h"
 
 UEnemyHealthCard::UEnemyHealthCard()
 {
@@ -12,14 +13,27 @@ UEnemyHealthCard::UEnemyHealthCard()
 	Rarity = ECardRarity::Common;
 }
 
+
 void UEnemyHealthCard::ApplyCard(AActor* Target)
 {
-	AEnemyBase* EnemyActor = Cast<AEnemyBase>(Target);
-	if (!EnemyActor)
-		return;
+	if (UWorld* World = Target->GetWorld())
+	{
+		AGM_DeadPixels* GM = Cast<AGM_DeadPixels>(World->GetAuthGameMode());
+		if (GM)
+		{
+			GM->GlobalEnemyHealthBonus += HealthIncrease;
+		}
+	}
+}
+
+/*
+void UEnemyHealthCard::ApplyEnemyCard(UDataAsset* Target)
+{
 	
-	if (UEnemyStatsData* Stats = EnemyActor->Stats)
+	if (UEnemyStatsData* Stats = Cast<UEnemyStatsData>(Target))
 	{
 		Stats->MaxHealth += HealthIncrease;
 	}
 }
+*/
+
