@@ -35,6 +35,7 @@ public:
 	void HandleSpriteVisibility();
 
 	virtual void HandleHitExtended() override;
+	void HandlePlayerDefeated();
 	virtual void EndHitStop(ACharacterBase* ActorHitStop) override;
 	virtual void OnStunnedOverrideCompleted(bool IsCompleted) override;
 

@@ -8,6 +8,7 @@
 #include "EnhancedInputComponent.h"
 #include "PaperFlipbookComponent.h"
 #include "PaperZDAnimationComponent.h"
+#include "PaperZDAnimInstance.h"
 #include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
 #include "Cards/CardManager.h"
@@ -175,28 +176,68 @@ void AMainCharacter::HandleHitExtended()
 {
 	if (UPaperZDAnimInstance* CharacterAnimInstance = GetAnimationComponent()->GetAnimInstance())
 	{
-		IsStunned = true;
-		HealthComp->StartInvincibility();
-		HurtBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		if (ACharacterBase* Player = Cast<ACharacterBase>(this))
+		if (!HealthComp->IsDead)
 		{
-			Player->CustomTimeDilation = 0.f;
-			GetWorldTimerManager().SetTimer(
-				HitHandle,
-				FTimerDelegate::CreateUObject(
-					this,
-					&AMainCharacter::EndHitStop, Player),
-				this->HitStopDuration,
-				false);
+			IsStunned = true;
+			HealthComp->StartInvincibility();
+			HurtBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			if (ACharacterBase* Player = Cast<ACharacterBase>(this))
+			{
+				Player->CustomTimeDilation = 0.f;
+				GetWorldTimerManager().SetTimer(
+					HitHandle,
+					FTimerDelegate::CreateUObject(
+						this,
+						&AMainCharacter::EndHitStop, Player),
+					this->HitStopDuration,
+					false);
 
-			GetWorldTimerManager().SetTimer(
-				StunnedHandle,
-				FTimerDelegate::CreateUObject(
-					this,
-					&AMainCharacter::OnStunnedOverrideCompleted, true),
-				this->StunnedTime,
-				false);
+				GetWorldTimerManager().SetTimer(
+					StunnedHandle,
+					FTimerDelegate::CreateUObject(
+						this,
+						&AMainCharacter::OnStunnedOverrideCompleted, true),
+					this->StunnedTime,
+					false);
+			}
 		}
+		else
+		{
+			if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+			{
+				DisableInput(PlayerController);
+				GetWorldTimerManager().SetTimer(
+					StunnedHandle,
+					FTimerDelegate::CreateUObject(
+						this,
+						&AMainCharacter::OnStunnedOverrideCompleted, true),
+					this->StunnedTime,
+					false);
+			}
+			HandlePlayerDefeated();
+		}
+	}
+}
+
+void AMainCharacter::HandlePlayerDefeated()
+{
+	HurtBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	int32 DeathChoice = FMath::RandRange(0, 2);
+	if (UPaperZDAnimInstance* CharacterAnimInstance = GetAnimationComponent()->GetAnimInstance())
+	{
+		switch (DeathChoice)
+		{
+		case 0: CharacterAnimInstance->JumpToNode(FName("PlayerDeathJump"));
+			break;
+		case 1: CharacterAnimInstance->JumpToNode(FName("PlayerDeath2Jump"));
+			break;
+		case 2:
+			CharacterAnimInstance->JumpToNode(FName("PlayerDeath3Jump"));
+			break;
+		default: CharacterAnimInstance->JumpToNode(FName("PlayerDeathJump"));
+		}
+			
 	}
 }
 
@@ -228,8 +269,6 @@ void AMainCharacter::LevelUp(const FInputActionValue& Value)
 void AMainCharacter::SwapWeapons(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Swap Weapons"));
-
-	//SetEquippedWeapon();
 }
 
 void AMainCharacter::OnInvincibilityEnd_DelegateSignature()
