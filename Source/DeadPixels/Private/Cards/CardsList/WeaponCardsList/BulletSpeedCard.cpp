@@ -13,6 +13,6 @@ void UBulletSpeedCard::ApplyCard(AActor* Target)
 {
 	if (AWeapons* W = Cast<AWeapons>(Target))
 	{
-		W->BulletSpeed -= BulletSpeedIncrease;
+		W->BulletSpeed += BulletSpeedIncrease;
 	}
 }
