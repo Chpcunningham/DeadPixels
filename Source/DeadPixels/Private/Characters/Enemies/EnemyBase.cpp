@@ -43,7 +43,7 @@ void AEnemyBase::MoveEnemy(FVector WorldDirection)
 	if (!HealthComp->IsDead)
 	{
 		this->AddMovementInput(WorldDirection, 1.f);
-		GetCharacterMovement()->MaxWalkSpeed = 250.f;
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	}
 }
 
@@ -101,10 +101,12 @@ void AEnemyBase::BeginPlay()
 
 	float BonusHealth = GM ? GM->GlobalEnemyHealthBonus : 0.f;
 	float BonusDamage = GM ? GM->GlobalEnemyDamageBonus : 0.f;
+	float BonusWalkSpeed = GM ? GM->GlobalEnemyWalkSpeedBonus : 0.f;
 
 	HealthComp->MaxHealth += BonusHealth;
 	HealthComp->CurrentHealth += BonusHealth;
 	Damage += BonusDamage;
+	WalkSpeed += BonusWalkSpeed;
 
 	if (HurtBox)
 	{

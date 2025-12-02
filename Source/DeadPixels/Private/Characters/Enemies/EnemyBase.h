@@ -25,6 +25,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Damage = 1.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float WalkSpeed = 250.f;
+	
 	virtual void Tick(float DeltaTime) override;
 
 	void MoveEnemy(FVector WorldDirection);

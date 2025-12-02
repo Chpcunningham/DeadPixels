@@ -47,6 +47,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	float GlobalEnemyDamageBonus = 0.f;
 
+	UPROPERTY(BlueprintReadWrite)
+	float GlobalEnemyWalkSpeedBonus = 0.f;
+
 	UPROPERTY(EditAnywhere)
 	int32 CurrentWave = 0;
 private:
