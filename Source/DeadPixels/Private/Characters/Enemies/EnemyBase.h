@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EnemyStatsData.h"
 #include "Characters/CharacterBase.h"
 #include "EnemyBase.generated.h"
 
@@ -25,9 +24,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Damage = 1.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	UEnemyStatsData* Stats;
 
 	virtual void Tick(float DeltaTime) override;
 
