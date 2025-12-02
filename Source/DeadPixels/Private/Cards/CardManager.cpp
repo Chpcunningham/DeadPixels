@@ -54,38 +54,44 @@ TArray<TSubclassOf<UCard>> ACardManager::GetCardsByRarity(ECardRarity Rarity)
 	}
 	return Result;
 }
-TArray<TSubclassOf<UCard>> ACardManager::GetRandomCardChoices(int32 Count)
+TArray<TSubclassOf<UCard>> ACardManager::GetRandomCardChoices(int32 Count, ECardType FilterType)
 {
 	TArray<TSubclassOf<UCard>> Results;
+
+	TArray<TSubclassOf<UCard>> AllowedCards;
+
+	for (auto CardClass : CardsArray)
+	{
+		if (!CardClass) continue;
+
+		UCard* DefaultObj = Cast<UCard>(CardClass->GetDefaultObject());
+		if (DefaultObj && DefaultObj->GetCardType() == FilterType)
+		{
+			AllowedCards.Add(CardClass);
+		}
+	}
+	
+	if (AllowedCards.Num() == 0) { return Results; }
 
 	for (int i = 0; i < Count; i++)
 	{
 		ECardRarity Rarity = ChooseRarity();
-		TArray<TSubclassOf<UCard>> Pool = GetCardsByRarity(Rarity);
 
-		if (Pool.Num() == 0)
-			Pool = CardsArray;
+		TArray<TSubclassOf<UCard>> RarityPool;
+		for (auto CardClass : AllowedCards)
+		{
+			UCard* DefaultObj = Cast<UCard>(CardClass->GetDefaultObject());
+			if (DefaultObj && DefaultObj->GetRarity() == Rarity)
+			{
+				RarityPool.Add(CardClass);
+			}
+		}
 
-		int Index = FMath::RandRange(0, Pool.Num() - 1);
-		Results.Add(Pool[Index]);
+		if (RarityPool.Num() == 0) { RarityPool = AllowedCards; }
+		
+		int Index = FMath::RandRange(0, RarityPool.Num() - 1);
+		Results.Add(RarityPool[Index]);
 	}
 
 	return Results;
-}
-
-
-UCard* ACardManager::GiveRandomCard(AActor* Target)
-{
-	ECardRarity SelectedRarity = ChooseRarity();
-	TArray<TSubclassOf<UCard>> Pool = GetCardsByRarity(SelectedRarity);
-	if (Pool.Num() == 0)
-		Pool = GetCardsByRarity(ECardRarity::Common);
-	if (Pool.Num() == 0) return nullptr;
-
-	int Index = FMath::RandRange(0, Pool.Num() - 1);
-	UCard* SpawnedCard = GetWorld()->SpawnActor<UCard>(Pool[Index]);
-	if (SpawnedCard)
-		SpawnedCard->ApplyCard(Target);
-
-	return SpawnedCard;
 }

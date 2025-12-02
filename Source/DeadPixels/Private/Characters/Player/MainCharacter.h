@@ -52,6 +52,15 @@ public:
 
 	void SetEquippedWeapon(AWeapons* NewWeapon);
 	AWeapons* GetEquippedWeapon() const;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Level;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Experience;
+	
+	float WalkSpeed = 350.f;
+	float RunSpeed = 600.f;
 	
 protected:
 	void Movement(const FInputActionValue& Value);
@@ -67,8 +76,6 @@ private:
 	float StunnedTime = 0.2f;
 	float HitStopDuration = 0.1f;
 	
-	float WalkSpeed = 350.f;
-	float RunSpeed = 600.f;
 
 	UFUNCTION()
 	void OnInvincibilityEnd_DelegateSignature();

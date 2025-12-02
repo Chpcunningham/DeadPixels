@@ -4,7 +4,7 @@
 UBulletsCard::UBulletsCard()
 {
 	CardName = "Bullets Boost";
-	Description = "Increases the number of bullets your gun shoots by : ";
+	Description = FString::Printf(TEXT("Increases the number of bullets your gun shoots by: %d"), BulletIncrease);
 	CardType = ECardType::Weapon;
 	Rarity = ECardRarity::Common;
 }

@@ -29,7 +29,7 @@ public:
 	TArray<TSubclassOf<UCard>> CardsArray;
 
 	UFUNCTION(BlueprintCallable)
-	TArray<TSubclassOf<UCard>> GetRandomCardChoices(int32 Count);
+	TArray<TSubclassOf<UCard>> GetRandomCardChoices(int32 Count, ECardType FilterType);
 
 	UPROPERTY(EditAnywhere, Category="Rarity Weights")
 	float CommonWeight = 70.f;

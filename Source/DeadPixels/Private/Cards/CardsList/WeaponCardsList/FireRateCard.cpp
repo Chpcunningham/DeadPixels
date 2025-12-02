@@ -4,7 +4,7 @@
 UFireRateCard::UFireRateCard()
 {
 	CardName = "Fire rate Boost";
-	Description = "Increases your weapon's attack speed.";
+	Description = FString::Printf(TEXT("Increases your weapon's attack speed by: %.1f"), FireRateIncrease);
 	CardType = ECardType::Weapon;
 	Rarity = ECardRarity::Common;
 }

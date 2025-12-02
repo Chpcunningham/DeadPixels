@@ -1,6 +1,9 @@
 #include "Bullet.h"
+
+#include "SkeletonTreeBuilder.h"
 #include "Weapons/Weapons.h"
 #include "Characters/Enemies/EnemyBase.h"
+#include "DynamicMesh/MeshTransforms.h"
 #include "Kismet/GameplayStatics.h"
 
 ABullet::ABullet()
@@ -19,7 +22,6 @@ ABullet::ABullet()
 	SphereComp->SetNotifyRigidBodyCollision(true);
 	SphereComp->SetGenerateOverlapEvents(true);
 	SphereComp->UpdateOverlaps();
-	
 }
 
 void ABullet::BeginPlay()
@@ -44,6 +46,16 @@ void ABullet::Tick(float DeltaTime)
 	}
 }
 
+void ABullet::SetWeapon(AWeapons* Weapon)
+{
+	CurrentWeapon = Weapon;
+	if (SphereComp && CurrentWeapon)
+	{
+		SphereComp->SetWorldScale3D(FVector(CurrentWeapon->BulletSize));
+	}
+}
+
+
 void ABullet::OnOverlapStart(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -60,7 +72,7 @@ void ABullet::OnOverlapStart(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 void ABullet::Launch(FVector2D Direction, float Speed)
 {
 	if (IsLaunched) return;
-
+	
 	IsLaunched = true;
 
 	MovementDirection = Direction;

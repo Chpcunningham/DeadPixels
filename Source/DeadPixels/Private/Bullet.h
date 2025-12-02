@@ -51,5 +51,7 @@ public:
 
 	void Launch(FVector2D Direction, float Speed);
 
+	void SetWeapon(AWeapons* Weapon);
+
 	void OnDeleteTimerTimeOut();
 };
