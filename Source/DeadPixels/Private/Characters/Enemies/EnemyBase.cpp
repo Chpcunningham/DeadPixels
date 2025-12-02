@@ -51,28 +51,10 @@ void AEnemyBase::HandleHitExtended()
 {
 	if (HealthComp->IsDead)
 	{
-		HurtBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		int32 DeathChoice = FMath::RandRange(0, 1);
-		if (UPaperZDAnimInstance* EnemyAnimInstance = GetAnimationComponent()->GetAnimInstance())
-		{
-			GEngine->AddOnScreenDebugMessage(1, 4.f, FColor::Red, FString(TEXT("Attempting to play death animation")));
-			switch (DeathChoice)
-			{
-			case 0: EnemyAnimInstance->JumpToNode(FName("DeathJump"));
-				GEngine->AddOnScreenDebugMessage(1, 4.f, FColor::Red, FString(TEXT("Playing Death")));
-				break;
-			case 1: EnemyAnimInstance->JumpToNode(FName("Death2Jump"));
-				GEngine->AddOnScreenDebugMessage(1, 4.f, FColor::Red, FString(TEXT("Playing Death2")));
-				break;
-			default: EnemyAnimInstance->JumpToNode(FName("DeathJump"));
-				GEngine->AddOnScreenDebugMessage(1, 4.f, FColor::Red, FString(TEXT("Playing Default Death")));
-			}
-			HandleDefeat();
-		}
+		HandleDefeat();
 	}
 	else
 	{
-		HealthComp->StartInvincibility();
 		if (ACharacterBase* Enemy = Cast<ACharacterBase>(this))
 		{
 			Enemy->CustomTimeDilation = 0.f;
@@ -84,16 +66,13 @@ void AEnemyBase::HandleHitExtended()
 				this->HitStopDuration,
 				false);
 		}
+		SetStun();
 	}
 }
 
 void AEnemyBase::EndHitStop(ACharacterBase* ActorHitStop)
 {
-	if (!HealthComp->IsDead)
-	{
-		Super::EndHitStop(ActorHitStop);
-		SetStun();
-	}
+	Super::EndHitStop(ActorHitStop);
 }
 
 void AEnemyBase::OnOverlapPlayer(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -157,6 +136,23 @@ void AEnemyBase::HandleDefeat()
 {
 	HurtBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	int32 DeathChoice = FMath::RandRange(0, 1);
+	if (UPaperZDAnimInstance* EnemyAnimInstance = GetAnimationComponent()->GetAnimInstance())
+	{
+		GEngine->AddOnScreenDebugMessage(1, 4.f, FColor::Red, FString(TEXT("Attempting to play death animation")));
+		switch (DeathChoice)
+		{
+		case 0: EnemyAnimInstance->JumpToNode(FName("DeathJump"));
+			GEngine->AddOnScreenDebugMessage(1, 4.f, FColor::Red, FString(TEXT("Playing Death")));
+			break;
+		case 1: EnemyAnimInstance->JumpToNode(FName("Death2Jump"));
+			GEngine->AddOnScreenDebugMessage(1, 4.f, FColor::Red, FString(TEXT("Playing Death2")));
+			break;
+		default: EnemyAnimInstance->JumpToNode(FName("DeathJump"));
+			GEngine->AddOnScreenDebugMessage(1, 4.f, FColor::Red, FString(TEXT("Playing Default Death")));
+		}
+			
+	}
 	GetWorldTimerManager().SetTimer(
 		DespawnHandle,
 		FTimerDelegate::CreateUObject(

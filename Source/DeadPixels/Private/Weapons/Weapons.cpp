@@ -10,7 +10,7 @@ AWeapons::AWeapons()
 	Damage = 10.0f;
 	FireRate = 0.3f;
 	Ammo = 6;
-	BulletSpeed = 2.0f;
+	BulletSpeed = 500.f;
 	BulletSpread = 100.f;
 
 	//WeaponParent = CreateDefaultSubobject<USceneComponent>(TEXT("GunParent"));
@@ -62,8 +62,6 @@ void AWeapons::Fire()
 
 	if (NumOfBullets == 1)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Shoot"));
-
 		ABullet* Bullet = GetWorld()->SpawnActor<ABullet>(BulletActorToSpawn,
 		                                                  BulletSpawnPosition->GetComponentLocation(),
 		                                                  FRotator(0, 0, 0));
