@@ -1,8 +1,5 @@
 ﻿#include "EnemyHealthCard.h"
-
 #include "Characters/Enemies/EnemyBase.h"
-#include "Characters/Enemies/EnemyStatsData.h"
-#include "Components/HealthComponent.h"
 #include "GameMode/GM_DeadPixels.h"
 
 UEnemyHealthCard::UEnemyHealthCard()
@@ -26,14 +23,4 @@ void UEnemyHealthCard::ApplyCard(AActor* Target)
 	}
 }
 
-/*
-void UEnemyHealthCard::ApplyEnemyCard(UDataAsset* Target)
-{
-	
-	if (UEnemyStatsData* Stats = Cast<UEnemyStatsData>(Target))
-	{
-		Stats->MaxHealth += HealthIncrease;
-	}
-}
-*/
 

@@ -1,6 +1,5 @@
 ﻿#include "EnemyDamageCard.h"
 #include "Characters/Enemies/EnemyBase.h"
-#include "Characters/Enemies/EnemyStatsData.h"
 #include "GameMode/GM_DeadPixels.h"
 
 UEnemyDamageCard::UEnemyDamageCard() {
@@ -10,18 +9,6 @@ UEnemyDamageCard::UEnemyDamageCard() {
   CardType = ECardType::Enemy;
   Rarity = ECardRarity::Common;
 }
-/*
-void UEnemyDamageCard::ApplyEnemyCard(UDataAsset *Target)
-{
-  UE_LOG(LogTemp, Warning, TEXT("ApplyEnemyCard called with DataAsset: %s"),
-        Target ? *Target->GetName() : TEXT("NULL"));
-  
-    if (UEnemyStatsData *Stats = Cast<UEnemyStatsData>(Target))
-    {
-      Stats->Damage += DamageIncrease;
-    }
-}
-*/
 void UEnemyDamageCard::ApplyCard(AActor* Target)
 {
   if (UWorld* World = Target->GetWorld())

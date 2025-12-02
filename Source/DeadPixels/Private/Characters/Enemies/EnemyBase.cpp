@@ -126,14 +126,6 @@ void AEnemyBase::BeginPlay()
 	HealthComp->MaxHealth += BonusHealth;
 	HealthComp->CurrentHealth += BonusHealth;
 	Damage += BonusDamage;
-	
-	/*
-	if (Stats)
-	{
-		HealthComp->MaxHealth = Stats->MaxHealth;
-		Damage = Stats->Damage;
-	}*/
-
 
 	if (HurtBox)
 	{
