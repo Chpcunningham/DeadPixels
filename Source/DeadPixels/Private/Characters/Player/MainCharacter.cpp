@@ -78,7 +78,7 @@ void AMainCharacter::BeginPlay()
 		}
 	}
 	HealthComp->OnInvincibiltyEndDelegate.AddDynamic(this,
-		&AMainCharacter::OnInvincibilityEnd_DelegateSignature);
+	                                                 &AMainCharacter::OnInvincibilityEnd_DelegateSignature);
 }
 
 void AMainCharacter::Tick(float DeltaSeconds)
@@ -117,7 +117,10 @@ void AMainCharacter::Tick(float DeltaSeconds)
 void AMainCharacter::Movement(const FInputActionValue& Value)
 {
 	if (PlayerTags.HasTag(Movement_State_Running)
-		    ? GetCharacterMovement()->MaxWalkSpeed = RunSpeed : GetCharacterMovement()->MaxWalkSpeed = WalkSpeed){}
+		    ? GetCharacterMovement()->MaxWalkSpeed = RunSpeed
+		    : GetCharacterMovement()->MaxWalkSpeed = WalkSpeed)
+	{
+	}
 	FVector2D MovementDirection = Value.Get<FVector2D>();
 
 	const FRotator Rotation = GetControlRotation();
@@ -142,6 +145,8 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInput->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AMainCharacter::Attack);
 
 		EnhancedInput->BindAction(LevelUpAction, ETriggerEvent::Triggered, this, &AMainCharacter::LevelUp);
+
+		EnhancedInput->BindAction(ReloadAction, ETriggerEvent::Started, this, &AMainCharacter::Reload);
 	}
 }
 
@@ -162,8 +167,8 @@ void AMainCharacter::HandleSpriteVisibility()
 		FTimerDelegate::CreateUObject(
 			this,
 			&AMainCharacter::FlashSpriteVisibility),
-			0.1f,
-			true);
+		0.1f,
+		true);
 }
 
 void AMainCharacter::HandleHitExtended()
@@ -181,25 +186,23 @@ void AMainCharacter::HandleHitExtended()
 				FTimerDelegate::CreateUObject(
 					this,
 					&AMainCharacter::EndHitStop, Player),
-					this->HitStopDuration,
-					false);
+				this->HitStopDuration,
+				false);
 
 			GetWorldTimerManager().SetTimer(
 				StunnedHandle,
 				FTimerDelegate::CreateUObject(
 					this,
 					&AMainCharacter::OnStunnedOverrideCompleted, true),
-					this->StunnedTime,
-					false);
+				this->StunnedTime,
+				false);
 		}
-		
 	}
 }
 
 void AMainCharacter::EndHitStop(ACharacterBase* ActorHitStop)
 {
 	Super::EndHitStop(ActorHitStop);
-	
 }
 
 void AMainCharacter::OnStunnedOverrideCompleted(bool IsCompleted)
@@ -244,6 +247,17 @@ void AMainCharacter::Attack(const FInputActionValue& Value)
 		if (Weapon->CanAttack)
 		{
 			Weapon->Fire();
+		}
+	}
+}
+
+void AMainCharacter::Reload(const FInputActionValue& Value)
+{
+	if (AWeapons* Weapon = GetEquippedWeapon())
+	{
+		if (!Weapon->IsReloading)
+		{
+			Weapon->StartReload();
 		}
 	}
 }

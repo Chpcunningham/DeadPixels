@@ -33,15 +33,24 @@ class DEADPIXELS_API AWeapons : public AActor
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
 	bool CanAttack = true;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
+	bool IsReloading = false;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
 	float Damage;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
 	int Ammo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
+	int MaxAmmo;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
-    float FireRate = 0.3f;
+	float FireRate = 0.3f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
+	float ReloadRate = 0.3f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
 	int NumOfBullets = 1;
@@ -69,10 +78,16 @@ class DEADPIXELS_API AWeapons : public AActor
 	
     FTimerHandle CooldownTimer;
 
+	FTimerHandle ReloadTimer;
+
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ABullet> BulletActorToSpawn;
 	
 	void OnCooldownTimerTimeout();
+
+	void OnReloadTimerTimeout();
+
+	void StartReload();
 	
 };
 /*class Weapons

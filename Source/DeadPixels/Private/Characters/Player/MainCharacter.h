@@ -67,6 +67,7 @@ protected:
 	void Attack(const FInputActionValue& Value);
 	void LevelUp(const FInputActionValue& Value);
 	void SwapWeapons(const FInputActionValue& Value);
+	void Reload(const FInputActionValue& Value);
 
 private:
 
@@ -94,6 +95,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category=Input)
 	UInputAction* AttackAction;
+
+	UPROPERTY(EditAnywhere, Category=Input)
+	UInputAction* ReloadAction;
 
 	UPROPERTY(EditAnywhere, Category=Input)
 	UInputAction* SwapWeaponsAction;
