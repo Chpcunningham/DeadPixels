@@ -4,6 +4,8 @@
 #include "AI/EnemyAI_Base.h"
 
 #include "Characters/Enemies/EnemyBase.h"
+#include "Characters/Player/MainCharacter.h"
+#include "Components/HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -28,26 +30,29 @@ void AEnemyAI_Base::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (PlayerTarget)
+	if (AMainCharacter* Player = Cast<AMainCharacter>(PlayerTarget))
 	{
-		FVector TargetForwardVector;
-		FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(
-			PossessedEnemy->GetActorLocation(),
-			PlayerTarget->GetActorLocation());
-
-		TargetForwardVector = UKismetMathLibrary::GetForwardVector(TargetRotation);
-
-		if (DistanceToPlayer() > StopDistance)
+		if (!Player->HealthComp->IsDead)
 		{
-			PossessedEnemy->MoveEnemy(TargetForwardVector);
-		}
+			FVector TargetForwardVector;
+			FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(
+				PossessedEnemy->GetActorLocation(),
+				PlayerTarget->GetActorLocation());
 
-		FVector PlayerDirection = TargetForwardVector;
-		PlayerDirection.Z = 0; // Flattens to a 2D Plane
-		PlayerDirection.Normalize();
+			TargetForwardVector = UKismetMathLibrary::GetForwardVector(TargetRotation);
+
+			if (DistanceToPlayer() > StopDistance)
+			{
+				PossessedEnemy->MoveEnemy(TargetForwardVector);
+			}
+
+			FVector PlayerDirection = TargetForwardVector;
+			PlayerDirection.Z = 0; // Flattens to a 2D Plane
+			PlayerDirection.Normalize();
 		
-		EnemyDirection = FVector2D(PlayerDirection.X, PlayerDirection.Y);
-		PossessedEnemy->EnemyDirectionality = EnemyDirection;
+			EnemyDirection = FVector2D(PlayerDirection.X, PlayerDirection.Y);
+			PossessedEnemy->EnemyDirectionality = EnemyDirection;
+		}
 	}
 }
 
