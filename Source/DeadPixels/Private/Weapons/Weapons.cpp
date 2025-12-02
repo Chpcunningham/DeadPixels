@@ -11,6 +11,7 @@ AWeapons::AWeapons()
 	FireRate = 0.3f;
 	Ammo = 6;
 	BulletSpeed = 2.0f;
+	BulletSpread = 100.f;
 
 	//WeaponParent = CreateDefaultSubobject<USceneComponent>(TEXT("GunParent"));
 	//WeaponParent->SetupAttachment(GetRootComponent());
@@ -84,8 +85,8 @@ void AWeapons::Fire()
 			for (int i = 0; i < NumOfBullets; i++)
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Shoot"));
-				float BulletSpreadX = FMath::RandRange(-100.f, 100.f);
-				float BulletSpreadY = FMath::RandRange(-100.f, 100.f);
+				float BulletSpreadX = FMath::RandRange(-BulletSpread, BulletSpread);
+				float BulletSpreadY = FMath::RandRange(-BulletSpread, BulletSpread);
 		
 				ABullet *Bullet = GetWorld()->SpawnActor<ABullet>(BulletActorToSpawn, BulletSpawnPosition->GetComponentLocation(), FRotator(0, 0, 0));
 				check(Bullet);
