@@ -29,6 +29,7 @@ AEnemyBase::AEnemyBase()
 	HurtBox->UpdateOverlaps();
 
 	HurtBox->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBase::OnOverlapPlayer);
+	
 }
 
 void AEnemyBase::Tick(float DeltaTime)
@@ -100,7 +101,7 @@ void AEnemyBase::OnOverlapPlayer(UPrimitiveComponent* OverlappedComponent, AActo
 {
 	if (AMainCharacter* Player = Cast<AMainCharacter>(OtherActor))
 	{
-		UGameplayStatics::ApplyDamage(Player, 1.f, this->GetController(), this, UDamageType::StaticClass());
+		UGameplayStatics::ApplyDamage(Player, Damage, this->GetController(), this, UDamageType::StaticClass());
 	}
 }
 
@@ -115,6 +116,12 @@ void AEnemyBase::BeginPlay()
 	Super::BeginPlay();
 
 	GetAnimationComponent()->SetAnimInstanceClass(EnemyInstance);
+	
+	if (Stats)
+	{
+		HealthComp->MaxHealth = Stats->MaxHealth;
+		Damage = Stats->Damage;
+	}
 
 
 	if (HurtBox)

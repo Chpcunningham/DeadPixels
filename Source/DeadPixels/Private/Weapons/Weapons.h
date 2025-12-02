@@ -50,7 +50,7 @@ class DEADPIXELS_API AWeapons : public AActor
 	float FireRate = 0.3f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
-	float ReloadRate = 0.3f;
+	float ReloadRate = 1.5f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
 	int NumOfBullets = 1;
