@@ -88,6 +88,8 @@ class DEADPIXELS_API AWeapons : public AActor
 	void OnReloadTimerTimeout();
 
 	void StartReload();
+
+	void LevelUp();
 	
 };
 /*class Weapons

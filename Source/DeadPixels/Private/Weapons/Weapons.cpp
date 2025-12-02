@@ -148,3 +148,8 @@ void AWeapons::StartReload()
 
 	GetWorldTimerManager().SetTimer(ReloadTimer, this, &AWeapons::OnReloadTimerTimeout, ReloadRate, false);
 }
+
+void AWeapons::LevelUp()
+{
+	Level++;
+}
