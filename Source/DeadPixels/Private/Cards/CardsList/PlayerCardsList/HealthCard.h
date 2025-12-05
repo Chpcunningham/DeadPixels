@@ -1,3 +1,5 @@
+//Maxwell Clement
+
 #pragma once
 
 #include "CoreMinimal.h"

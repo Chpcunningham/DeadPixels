@@ -1,3 +1,5 @@
+//Maxwell Clement
+
 #include "CardManager.h"
 
 ACardManager::ACardManager()

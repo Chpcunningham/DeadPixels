@@ -1,3 +1,5 @@
+//Maxwell Clement
+
 #include "FireRateCard.h"
 #include "Weapons/Weapons.h"
 

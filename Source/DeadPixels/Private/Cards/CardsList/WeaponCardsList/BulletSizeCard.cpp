@@ -1,3 +1,5 @@
+//Maxwell Clement
+
 #include "BulletSizeCard.h"
 #include "Weapons/Weapons.h"
 

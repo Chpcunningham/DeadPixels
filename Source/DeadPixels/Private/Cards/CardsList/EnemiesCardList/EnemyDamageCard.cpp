@@ -1,4 +1,6 @@
-﻿#include "EnemyDamageCard.h"
+﻿//Maxwell Clement
+
+#include "EnemyDamageCard.h"
 #include "Characters/Enemies/EnemyBase.h"
 #include "GameMode/GM_DeadPixels.h"
 

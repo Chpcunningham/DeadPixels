@@ -1,3 +1,5 @@
+//Maxwell Clement
+
 #include "BulletSpeedCard.h"
 #include "Weapons/Weapons.h"
 

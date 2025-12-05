@@ -50,7 +50,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	float GlobalEnemyWalkSpeedBonus = 0.f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	int32 CurrentWave = 0;
 private:
 	FTimerHandle WaveTimerHandle;

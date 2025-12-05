@@ -1,3 +1,5 @@
+//Maxwell Clement
+
 #include "DamageCard.h"
 #include "Weapons/Weapons.h"
 

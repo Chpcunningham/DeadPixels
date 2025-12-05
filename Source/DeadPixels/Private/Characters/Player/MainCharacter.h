@@ -54,11 +54,17 @@ public:
 	void SetEquippedWeapon(AWeapons* NewWeapon);
 	AWeapons* GetEquippedWeapon() const;
 
+	UPROPERTY(BlueprintReadWrite)
+	float PlayerPoints = 0.f;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Level;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Experience;
+	float Experience = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons", meta=(AllowPrivateAccess=true))
+	AWeapons* CurrentWeapon = nullptr;
 	
 	float WalkSpeed = 350.f;
 	float RunSpeed = 600.f;
@@ -82,8 +88,7 @@ private:
 	UFUNCTION()
 	void OnInvincibilityEnd_DelegateSignature();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons", meta=(AllowPrivateAccess=true))
-	AWeapons* CurrentWeapon = nullptr;
+	
 	
 	UPROPERTY(EditAnywhere, Category=Input)
 	UInputMappingContext* PlayerMappingContext;

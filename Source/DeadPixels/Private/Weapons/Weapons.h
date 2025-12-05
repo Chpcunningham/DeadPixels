@@ -1,3 +1,5 @@
+//Maxwell Clement
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -71,7 +73,7 @@ class DEADPIXELS_API AWeapons : public AActor
 	int Level;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Experience;
+	float Experience = 0.f;
 
 	UFUNCTION(BluePrintCallable, Category = "Weapons")
 	virtual void Fire();

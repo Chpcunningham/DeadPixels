@@ -136,6 +136,11 @@ void AEnemyBase::EndStun()
 
 void AEnemyBase::HandleDefeat()
 {
+	AMainCharacter* Player = Cast<AMainCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+	
+	Player->PlayerPoints += 10;
+	Player->CurrentWeapon->Experience += 10.f;
+	
 	HurtBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	int32 DeathChoice = FMath::RandRange(0, 1);

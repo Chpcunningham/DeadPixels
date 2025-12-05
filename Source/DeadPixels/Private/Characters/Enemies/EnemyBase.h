@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Characters/CharacterBase.h"
+#include "GameMode/GM_DeadPixels.h"
 #include "EnemyBase.generated.h"
 
 /**
@@ -21,6 +22,10 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnEnemyDied OnEnemyDied;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//AGM_DeadPixels* GM;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Damage = 1.f;

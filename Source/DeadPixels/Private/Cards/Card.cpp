@@ -1,3 +1,5 @@
+//Maxwell Clement
+
 #include "Card.h"
 
 void UCard::ApplyCard(AActor* Target)
