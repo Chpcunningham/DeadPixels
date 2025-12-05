@@ -22,7 +22,9 @@ class DEADPIXELS_API AWeapons : public AActor
 
 	public:
 	virtual void Tick(float DeltaTime) override;
-	
+
+	UFUNCTION(BlueprintCallable, Category="Leveling")
+	virtual void LevelUp();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	USceneComponent* WeaponParent;
@@ -90,9 +92,6 @@ class DEADPIXELS_API AWeapons : public AActor
 	void OnReloadTimerTimeout();
 
 	void StartReload();
-
-	void LevelUp();
-	
 };
 /*class Weapons
 {

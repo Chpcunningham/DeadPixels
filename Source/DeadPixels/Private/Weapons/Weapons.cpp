@@ -151,5 +151,6 @@ void AWeapons::StartReload()
 
 void AWeapons::LevelUp()
 {
+	Experience -= 100.f;
 	Level++;
 }
