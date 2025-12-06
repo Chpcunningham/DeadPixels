@@ -1,3 +1,5 @@
+//Maxwell Clement
+
 #include "EnemyWalkSpeedCard.h"
 
 #include "GameMode/GM_DeadPixels.h"

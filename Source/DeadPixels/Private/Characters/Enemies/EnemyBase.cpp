@@ -1,4 +1,5 @@
 //Connor Cunningham
+//Maxwell Clement --Only to modify enemy stats
 
 
 #include "Characters/Enemies/EnemyBase.h"

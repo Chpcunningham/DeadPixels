@@ -1,4 +1,5 @@
 //Connor Cunningham
+//Maxwell Clement --Only global enemy bonuses
 
 #pragma once
 
