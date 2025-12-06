@@ -1,4 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//Connor Cunningham and Maxwell Clement
+//C.C --> Handled Most things except for Weapons
+//M.C --> handled weapons
 
 
 #include "Characters/Player/MainCharacter.h"
@@ -52,15 +54,7 @@ AMainCharacter::AMainCharacter()
 
 	WeaponParent = CreateDefaultSubobject<USceneComponent>(TEXT("WeaponParent"));
 	WeaponParent->SetupAttachment(GetRootComponent());
-
-
-	//To move to weapons
-
-	//WeaponFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("WeaponFlipbook"));
-	//WeaponFlipbook->SetupAttachment(WeaponParent);
-
-	//BulletSpawnPosition = CreateDefaultSubobject<USceneComponent>(TEXT("BulletSpawnPosition"));
-	//BulletSpawnPosition->SetupAttachment(WeaponFlipbook);
+	
 }
 
 void AMainCharacter::BeginPlay()
@@ -98,11 +92,6 @@ void AMainCharacter::Tick(float DeltaSeconds)
 		//To integrate differently later
 		FVector MWorldLoc, MWorldDir;
 		PlayerController->DeprojectMousePositionToWorld(MWorldLoc, MWorldDir);
-		//FVector CurrentLoc = GetActorLocation();
-		//FVector Start = FVector(CurrentLoc.X, CurrentLoc.Y, 0.0f);
-		//FVector Target = FVector(MWorldLoc.X, MWorldLoc.Y, 0.0f);
-		//FRotator WeaponRotation = UKismetMathLibrary::FindLookAtRotation(Start, Target);
-		//WeaponParent->SetRelativeRotation(WeaponRotation);
 
 		// 2D direction from player → mouse
 		FVector2D Dir = FVector2D(MWorldLoc.X - GetActorLocation().X, MWorldLoc.Y - GetActorLocation().Y);

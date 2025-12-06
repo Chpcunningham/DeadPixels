@@ -1,4 +1,5 @@
 //Maxwell Clement
+//Connor Cunningham -- Only to handle collisions
 
 #include "Weapons.h"
 #include "Bullet.h"

@@ -1,7 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//Connor Cunningham
 
 
 #include "GameMode/GM_DeadPixels.h"
+
+#include "Blueprint/UserWidget.h"
 #include "GameMode/SpawnManager.h"
 #include "Characters/Player/MainCharacter.h"
 #include "Kismet/GameplayStatics.h"
@@ -24,7 +26,11 @@ void AGM_DeadPixels::BeginPlay()
 	if (SpawnManagerInstance)
 	{
 		SpawnManagerInstance->OnAllEnemiesDefeated.AddDynamic(this, &AGM_DeadPixels::HandleWaveCompletion);
-		StartNextWave();
+		if (MainMenuClass)
+		{
+			MainMenu = CreateWidget<UUserWidget>(GetWorld(), MainMenuClass);
+			MainMenu->AddToViewport(50);
+		}
 	}
 }
 

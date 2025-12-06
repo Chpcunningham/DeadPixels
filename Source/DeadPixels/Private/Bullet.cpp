@@ -1,9 +1,10 @@
+//Connor Cunningham and Maxwell Clement
+//C.C --> Played with the collisions
+//M.c --> Everything else
 #include "Bullet.h"
 
-#include "SkeletonTreeBuilder.h"
 #include "Weapons/Weapons.h"
 #include "Characters/Enemies/EnemyBase.h"
-#include "DynamicMesh/MeshTransforms.h"
 #include "Kismet/GameplayStatics.h"
 
 ABullet::ABullet()

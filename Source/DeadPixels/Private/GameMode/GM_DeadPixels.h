@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//Connor Cunningham
 
 #pragma once
 
@@ -24,6 +24,7 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable, Category = "GameMode")
 	void StartNextWave();
 
 	UFUNCTION()
@@ -34,6 +35,12 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
 	TSubclassOf<ASpawnManager> SpawnManagerClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Spawning", BlueprintReadWrite)
+	TSubclassOf<UUserWidget> MainMenuClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Spawning", BlueprintReadWrite)
+	class UUserWidget* MainMenu;
 	
 	UPROPERTY(EditAnywhere, Category=Enemies)
 	TArray<TSubclassOf<class AEnemyBase>> EnemiesForWave;
@@ -52,6 +59,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	int32 CurrentWave = 0;
+
 private:
 	FTimerHandle WaveTimerHandle;
 };

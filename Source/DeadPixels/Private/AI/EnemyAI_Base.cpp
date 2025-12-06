@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+//Connor Cunningham
 
 #include "AI/EnemyAI_Base.h"
 
